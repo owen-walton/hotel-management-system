@@ -1,6 +1,7 @@
 /**
  * This is to create and handle the SQL connection from within Java.
  * @author Owen Walton
+ * Last edit: 21/05/25
  */
 
 package main.java.dbc;
