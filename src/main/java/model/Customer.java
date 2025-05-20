@@ -1,7 +1,7 @@
 /**
  * Customer instances store all data provided by the database from Customer table
  * Accessed by CustomerDAO
- * Used when interacting with customer
+ * Used when interacting with Customer table in DB
  * @author Owen Walton
  * Last edit: 21/05/25
  */
@@ -15,7 +15,7 @@ public class Customer
     // ----------------------------------------------------------------------
     // Class variables
     // ----------------------------------------------------------------------
-    // fields in db-table.
+    // Fields in db-table.
     private int iCustomerId ;
     private String szSurname ;
     private String szFirstName ;
