@@ -11,4 +11,5 @@ public interface ReadOnlyDAO<T>
 {
     T getByPK(int pk);
     List<T> getAll();
+    int getNumRows();
 }
