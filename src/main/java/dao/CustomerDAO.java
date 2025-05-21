@@ -74,7 +74,8 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
                     + ", PhoneNumber"
                     + ", Email"
                     + " FROM Customer"
-                    + " WHERE CustomerId = " + pk;
+                    + " WHERE CustomerId = " + pk
+                    + ";";
 
             // execute query
             sqlStatement = dbConnection.getConnection().createStatement();
@@ -85,8 +86,8 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
             customer = new Customer(resultSet.getInt("CustomerId"),
                     resultSet.getString("Surname"),
                     resultSet.getString("FirstName"),
-                    resultSet.getDate("DOB"),
                     resultSet.getString("Title"),
+                    resultSet.getDate("DOB"),
                     resultSet.getString("HouseNumber"),
                     resultSet.getString( "StreetName" ),
                     resultSet.getString( "City" ),
@@ -120,7 +121,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
             System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
 
             // create query
-            sql = "SELECT COUNT(*) AS total FROM Customer";
+            sql = "SELECT COUNT(*) AS total FROM Customer;";
 
             // execute query
             sqlStatement = dbConnection.getConnection().createStatement();
@@ -158,4 +159,200 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         return customerList;
     }
 
+    // ----------------------------------------------------------------------
+    // Implementation of WriteOnlyDAO
+    // ----------------------------------------------------------------------
+    @Override
+    public boolean insert(Customer customer)
+    {
+        // bRC stores whether insert has worked
+        boolean bRC = false;
+        int iRC; // iRC is used to calculate bRC
+        try
+        {
+            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
+
+            sql = "INSERT INTO Customer( "
+                    + " Surname"
+                    + ", FirstName"
+                    + ", Title"
+                    + ", DOB"
+                    + ", HouseNumber"
+                    + ", StreetName"
+                    + ", City"
+                    + ", Postcode"
+                    + ", PhoneNumber"
+                    + ", Email"
+                    + " ) "
+                    + " VALUES( "
+                    + "\"" + customer.getSzSurname()  + "\""
+                    + ", \"" + customer.getSzFirstName() + "\""
+                    + ", \"" + customer.getSzTitle() + "\""
+                    + ", \"" + customer.getDOB() + "\""
+                    + ", \"" + customer.getSzHouseNumber() + "\""
+                    + ", \"" + customer.getSzStreetName() + "\""
+                    + ", \"" + customer.getSzCity() + "\""
+                    + ", \"" + customer.getSzPostcode() + "\""
+                    + ", \"" + customer.getSzPhoneNumber() + "\""
+                    + ", \"" + customer.getSzEmail() + "\""
+                    + " ) ; " ;
+
+            sqlStatement = dbConnection.getConnection().createStatement() ;
+            iRC = sqlStatement.executeUpdate( sql ) ;
+
+            // iRC will hold how many records were updated or inserted.  zero is bad in this case.
+            if ( iRC == 1 )
+            {
+                bRC = true;
+            }
+        }
+        catch( SQLException se )
+        {
+            System.err.println( this.getClass().getName() + ":: SQL error:: " + se ) ;
+            se.printStackTrace() ;
+        }
+        catch ( Exception e )
+        {
+            System.err.println( this.getClass().getName() + ":: Error:: " + e ) ;
+            e.printStackTrace() ;
+        }
+
+        return bRC;
+    }
+
+    @Override
+    public boolean update(Customer customer)
+    {
+        // bRC stores whether update has worked
+        boolean bRC = false;
+        int iRC; // iRC is used to calculate bRC
+        try
+        {
+            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
+
+            sql = "UPDATE Customer SET ";
+
+            int count = 0; // can break out of function if all of customer's fields are null (nothing to update)
+
+            // add all updates that aren't null
+            if (customer.getSzSurname() != null)
+            {
+                sql = sql + "Surname = " + customer.getSzSurname() + ", ";
+                count++;
+            }
+            if (customer.getSzFirstName() != null)
+            {
+                sql = sql + "FirstName = " + customer.getSzFirstName() + ", ";
+                count++;
+            }
+            if (customer.getSzTitle() != null)
+            {
+                sql = sql + "Title = " + customer.getSzTitle() + ", ";
+                count++;
+            }
+            if (customer.getDOB() != null)
+            {
+                sql = sql + "DOB = " + customer.getDOB() + ", ";
+                count++;
+            }
+            if (customer.getSzHouseNumber() != null)
+            {
+                sql = sql + "HouseNumber = " + customer.getSzHouseNumber() + ", ";
+                count++;
+            }
+            if (customer.getSzStreetName() != null)
+            {
+                sql = sql + "StreetName = " + customer.getSzStreetName() + ", ";
+                count++;
+            }
+            if (customer.getSzCity() != null)
+            {
+                sql = sql + "City = " + customer.getSzCity() + ", ";
+                count++;
+            }
+            if (customer.getSzPostcode() != null)
+            {
+                sql = sql + "Postcode = " + customer.getSzPostcode() + ", ";
+                count++;
+            }
+            if (customer.getSzPhoneNumber() != null)
+            {
+                sql = sql + "PhoneNumber = " + customer.getSzPhoneNumber() + ", ";
+                count++;
+            }
+            if (customer.getSzEmail() != null)
+            {
+                sql = sql + "Email = " + customer.getSzEmail() + ", ";
+                count++;
+            }
+
+            if (count == 0)
+            {
+                return bRC;
+            }
+
+            sql = sql + " WHERE CustomerId = " + customer.getICustomerId() + ";";
+            // remove comma from last value
+            if (sql.matches(", WHERE"))
+            {
+                sql = sql.replaceAll(", WHERE", " WHERE");
+            }
+
+            sqlStatement = dbConnection.getConnection().createStatement() ;
+            iRC = sqlStatement.executeUpdate( sql ) ;
+
+            // iRC will hold how many records were updated or inserted.  zero is bad in this case.
+            if ( iRC == 1 )
+            {
+                bRC = true;
+            }
+        }
+        catch( SQLException se )
+        {
+            System.err.println( this.getClass().getName() + ":: SQL error:: " + se ) ;
+            se.printStackTrace() ;
+        }
+        catch ( Exception e )
+        {
+            System.err.println( this.getClass().getName() + ":: Error:: " + e ) ;
+            e.printStackTrace() ;
+        }
+
+        return bRC;
+    }
+
+    @Override
+    public boolean delete(int pk)
+    {
+        // bRC stores whether delete has worked
+        boolean bRC = false;
+        int iRC; // iRC is used to calculate bRC
+        try
+        {
+            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
+
+            sql = "DELETE FROM Customer WHERE CustomerId = " + pk + ";";
+
+            sqlStatement = dbConnection.getConnection().createStatement() ;
+            iRC = sqlStatement.executeUpdate( sql ) ;
+
+            // iRC will hold how many records were updated or inserted.  zero is bad in this case.
+            if ( iRC == 1 )
+            {
+                bRC = true;
+            }
+        }
+        catch( SQLException se )
+        {
+            System.err.println( this.getClass().getName() + ":: SQL error:: " + se ) ;
+            se.printStackTrace() ;
+        }
+        catch ( Exception e )
+        {
+            System.err.println( this.getClass().getName() + ":: Error:: " + e ) ;
+            e.printStackTrace() ;
+        }
+
+        return bRC;
+    }
 }

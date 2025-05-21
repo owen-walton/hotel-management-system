@@ -31,15 +31,15 @@ public class Customer
     // ----------------------------------------------------------------------
     // Constructor
     // ----------------------------------------------------------------------
-    public Customer(int iCustomerId, String szSurname, String szFirstName, Date DOB, String szTitle,
+    public Customer(int iCustomerId, String szSurname, String szFirstName, String szTitle, Date DOB,
                     String szHouseNumber, String szStreetName, String szCity, String szPostcode,
                     String szPhoneNumber, String szEmail)
     {
         this.iCustomerId = iCustomerId;
         this.szSurname = szSurname;
         this.szFirstName = szFirstName;
-        this.DOB = DOB;
         this.szTitle = szTitle;
+        this.DOB = DOB;
         this.szHouseNumber = szHouseNumber;
         this.szStreetName = szStreetName;
         this.szCity = szCity;
