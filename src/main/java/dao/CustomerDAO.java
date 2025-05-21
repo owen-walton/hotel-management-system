@@ -19,7 +19,6 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
     // ----------------------------------------------------------------------
     // DB materials.
     private String sql;
-    private String sz;
 
     private Statement sqlStatement = null;
     private ResultSet resultSet = null;
@@ -44,7 +43,6 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
     // ----------------------------------------------------------------------
     protected void reset()
     {
-        sz = null;
         sql = null;
         sqlStatement = null;
         resultSet = null;
@@ -150,7 +148,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
     @Override
     public List<Customer> getAll()
     {
-        List<Customer> customerList = new ArrayList<Customer>();
+        List<Customer> customerList = new ArrayList<>();
 
         for (int i = 1; i <= getNumRows(); i++)
         {
@@ -288,7 +286,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
 
             if (count == 0)
             {
-                return bRC;
+                return false;
             }
 
             sql = sql + " WHERE CustomerId = " + customer.getICustomerId() + ";";
@@ -302,7 +300,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
             iRC = sqlStatement.executeUpdate( sql ) ;
 
             // iRC will hold how many records were updated or inserted.  zero is bad in this case.
-            if ( iRC == 1 )
+            if ( iRC != 0 )
             {
                 bRC = true;
             }
