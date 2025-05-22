@@ -46,7 +46,7 @@ CREATE TABLE Hotel.Room
         IsFamilyRoom    Boolean     NOT NULL ,
         IsHoneymoonRoom    Boolean     NOT NULL ,
         Floor           SMALLINT     NOT NULL ,
-        £perNight       INT     NOT NULL ,
+        PoundsPerNight       INT     NOT NULL ,
         PRIMARY KEY ( RoomNumber )
 ) ;
 
@@ -64,100 +64,100 @@ CREATE TABLE Hotel.RoomBooking
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (1, 2, 'Twin', TRUE, FALSE, TRUE, FALSE, FALSE, 1, 110);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (2, 3, 'Triple', TRUE, FALSE, TRUE, TRUE, FALSE, 1, 120);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (3, 2, 'Double', TRUE, TRUE, TRUE, TRUE, TRUE, 1, 100);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (4, 2, 'Double', TRUE, FALSE, FALSE, FALSE, FALSE, 1, 90);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (5, 2, 'Queen', TRUE, TRUE, TRUE, FALSE, TRUE, 2, 110);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (6, 1, 'Single', TRUE, FALSE, FALSE, FALSE, FALSE, 2, 70);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (7, 2, 'Double', TRUE, FALSE, FALSE, FALSE, FALSE, 2, 110);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (8, 2, 'Twin', TRUE, FALSE, FALSE, FALSE, FALSE, 2, 110);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (9, 2, 'Double/Twin', FALSE, FALSE, FALSE, FALSE, FALSE, 2, 110);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (10, 2, 'Double', FALSE, FALSE, FALSE, FALSE, FALSE, 3, 90);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (11, 1, 'Single', FALSE, FALSE, FALSE, FALSE, FALSE, 3, 80);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (12, 2, 'Double', TRUE, FALSE, FALSE, FALSE, FALSE, 3, 90);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (13, 2, 'Double', TRUE, FALSE, FALSE, FALSE, FALSE, 3, 110);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (14, 2, 'Double', TRUE, TRUE, TRUE, FALSE, TRUE, 3, 110);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (15, 2, 'Twin', FALSE, FALSE, FALSE, FALSE, FALSE, 3, 110);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (16, 3, 'Double/Single', FALSE, FALSE, FALSE, FALSE, FALSE, 4, 100);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (17, 2, 'Double', TRUE, TRUE, TRUE, FALSE, TRUE, 4, 110);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (18, 2, 'Double', TRUE, FALSE, FALSE, FALSE, FALSE, 4, 110);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (19, 2, 'Twin', TRUE, FALSE, FALSE, FALSE, FALSE, 4, 90);
 
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
-    IsFamilyRoom, IsHoneymoonRoom, Floor, £perNight
+    IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
 ) VALUES (20, 2, 'Double', TRUE, TRUE, TRUE, FALSE, TRUE, 4, 110);

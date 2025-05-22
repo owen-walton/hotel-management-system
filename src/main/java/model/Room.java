@@ -23,13 +23,13 @@ public class Room
     private boolean bIsFamilyRoom;
     private boolean bIsHoneymoonRoom;
     private short iFloor;
-    private int iPricePerNight;
+    private int iPoundsPerNight;
 
     // ----------------------------------------------------------------------
     // Constructor
     // ----------------------------------------------------------------------
     public Room(int iRoomNumber, short iOccupancy, String szRoomType, boolean bHasShower, boolean bHasJacuzzi,
-                boolean bHasSeaView, boolean bIsFamilyRoom, boolean bIsHoneymoonRoom, short iFloor, int iPricePerNight)
+                boolean bHasSeaView, boolean bIsFamilyRoom, boolean bIsHoneymoonRoom, short iFloor, int iPoundsPerNight)
     {
         this.iRoomNumber = iRoomNumber;
         this.iOccupancy = iOccupancy;
@@ -40,7 +40,7 @@ public class Room
         this.bIsFamilyRoom = bIsFamilyRoom;
         this.bIsHoneymoonRoom = bIsHoneymoonRoom;
         this.iFloor = iFloor;
-        this.iPricePerNight = iPricePerNight;
+        this.iPoundsPerNight = iPoundsPerNight;
     }
 
     // ----------------------------------------------------------------------
@@ -82,8 +82,8 @@ public class Room
         this.iFloor = iFloor;
     }
 
-    public void setIPricePerNight(int iPricePerNight) {
-        this.iPricePerNight = iPricePerNight;
+    public void setIPoundsPerNight(int iPoundsPerNight) {
+        this.iPoundsPerNight = iPoundsPerNight;
     }
 
     // ----------------------------------------------------------------------
@@ -125,7 +125,7 @@ public class Room
         return iFloor;
     }
 
-    public int getIPricePerNight() {
-        return iPricePerNight;
+    public int getIPoundsPerNight() {
+        return iPoundsPerNight;
     }
 }

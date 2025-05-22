@@ -70,7 +70,7 @@ public class RoomDAO implements ReadOnlyDAO<Room>{
                     + ", IsFamilyRoom"
                     + ", IsHoneymoonRoom"
                     + ", Floor"
-                    + ", £perNight"
+                    + ", PoundsPerNight"
                     + " FROM Room"
                     + " WHERE RoomNumber = " + pk
                     + ";";
@@ -90,7 +90,7 @@ public class RoomDAO implements ReadOnlyDAO<Room>{
                     resultSet.getBoolean( "IsFamilyRoom" ),
                     resultSet.getBoolean( "IsHoneymoonRoom" ),
                     resultSet.getShort( "Floor" ),
-                    resultSet.getInt( "£perNight" ));
+                    resultSet.getInt( "PoundsPerNight" ));
 
             return room;
         }
