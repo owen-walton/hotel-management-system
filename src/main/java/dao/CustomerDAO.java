@@ -2,6 +2,8 @@
  *
  * This is a wrapper file used to handle interaction with Customer table in the database
  * @author Owen Walton
+ * Current issue - Delete customer details function not active currently
+ *                 whilst company decides what circumstance data is allowed to be deleted
  *
  **/
 
@@ -235,52 +237,52 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
             // add all updates that aren't null
             if (customer.getSzSurname() != null)
             {
-                sql = sql + "Surname = " + customer.getSzSurname() + ", ";
+                sql = sql + "Surname = '" + customer.getSzSurname() + "', ";
                 count++;
             }
             if (customer.getSzFirstName() != null)
             {
-                sql = sql + "FirstName = " + customer.getSzFirstName() + ", ";
+                sql = sql + "FirstName = '" + customer.getSzFirstName() + "', ";
                 count++;
             }
             if (customer.getSzTitle() != null)
             {
-                sql = sql + "Title = " + customer.getSzTitle() + ", ";
+                sql = sql + "Title = '" + customer.getSzTitle() + "', ";
                 count++;
             }
             if (customer.getDOB() != null)
             {
-                sql = sql + "DOB = " + customer.getDOB() + ", ";
+                sql = sql + "DOB = '" + customer.getDOB() + "', ";
                 count++;
             }
             if (customer.getSzHouseNumber() != null)
             {
-                sql = sql + "HouseNumber = " + customer.getSzHouseNumber() + ", ";
+                sql = sql + "HouseNumber = '" + customer.getSzHouseNumber() + "', ";
                 count++;
             }
             if (customer.getSzStreetName() != null)
             {
-                sql = sql + "StreetName = " + customer.getSzStreetName() + ", ";
+                sql = sql + "StreetName = '" + customer.getSzStreetName() + "', ";
                 count++;
             }
             if (customer.getSzCity() != null)
             {
-                sql = sql + "City = " + customer.getSzCity() + ", ";
+                sql = sql + "City = '" + customer.getSzCity() + "', ";
                 count++;
             }
             if (customer.getSzPostcode() != null)
             {
-                sql = sql + "Postcode = " + customer.getSzPostcode() + ", ";
+                sql = sql + "Postcode = '" + customer.getSzPostcode() + "', ";
                 count++;
             }
             if (customer.getSzPhoneNumber() != null)
             {
-                sql = sql + "PhoneNumber = " + customer.getSzPhoneNumber() + ", ";
+                sql = sql + "PhoneNumber = '" + customer.getSzPhoneNumber() + "', ";
                 count++;
             }
             if (customer.getSzEmail() != null)
             {
-                sql = sql + "Email = " + customer.getSzEmail() + ", ";
+                sql = sql + "Email = '" + customer.getSzEmail() + "', ";
                 count++;
             }
 
@@ -289,12 +291,9 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
                 return false;
             }
 
+            // remove tail comma (and space)
+            sql = sql.substring(0, sql.length() - 2);
             sql = sql + " WHERE CustomerId = " + customer.getICustomerId() + ";";
-            // remove comma from last value
-            if (sql.matches(", WHERE"))
-            {
-                sql = sql.replaceAll(", WHERE", " WHERE");
-            }
 
             sqlStatement = dbConnection.getConnection().createStatement() ;
             iRC = sqlStatement.executeUpdate( sql ) ;
@@ -322,6 +321,8 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
     @Override
     public boolean delete(int pk)
     {
+        // ------------------------------------- Currently doesn't work because customers are referenced in booking
+
         // bRC stores whether delete has worked
         boolean bRC = false;
         int iRC; // iRC is used to calculate bRC

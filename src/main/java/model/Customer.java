@@ -98,6 +98,20 @@ public class Customer
     // ----------------------------------------------------------------------
     // Getters
     // ----------------------------------------------------------------------
+    @Override
+    public String toString() {
+        return "First Name: " + szFirstName + "\n" +
+                "Surname: " + szSurname + "\n" +
+                "Title: " + szTitle + "\n" +
+                "Date of Birth: " + DOB + "\n" +
+                "House Number: " + szHouseNumber + "\n" +
+                "Street Name: " + szStreetName + "\n" +
+                "City: " + szCity + "\n" +
+                "Postcode: " + szPostcode + "\n" +
+                "Phone Number: " + szPhoneNumber + "\n" +
+                "Email: " + szEmail;
+    }
+
     public int getICustomerId() {
         return iCustomerId;
     }

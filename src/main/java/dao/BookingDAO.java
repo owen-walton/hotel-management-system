@@ -161,14 +161,11 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
             System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
 
             sql = "INSERT INTO Booking( "
-                + "BookingId"
-                + ", CustomerId"
+                + "CustomerId"
                 + ", StartDate"
                 + ", Nights"
                     + " ) "
-                    + " VALUES( "
-                    + "\"" + booking.getIBookingId()  + "\""
-                    + ", \"" + booking.getICustomerId() + "\""
+                    + " VALUES( " + booking.getICustomerId()
                     + ", \"" + booking.getStartDate() + "\""
                     + ", \"" + booking.getINights() + "\""
                     + " ) ; " ;
@@ -218,7 +215,7 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
             }
             if (booking.getStartDate() != null)
             {
-                sql = sql + "StartDate = " + booking.getStartDate() + ", ";
+                sql = sql + "StartDate = '" + booking.getStartDate() + "', ";
                 count++;
             }
             if (booking.getINights() != 0)
@@ -232,12 +229,8 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
                 return false;
             }
 
+            sql = sql.substring(0, sql.length() - 2);
             sql = sql + " WHERE BookingId = " + booking.getIBookingId() + ";";
-            // remove comma from last value
-            if (sql.matches(", WHERE"))
-            {
-                sql = sql.replaceAll(", WHERE", " WHERE");
-            }
 
             sqlStatement = dbConnection.getConnection().createStatement() ;
             iRC = sqlStatement.executeUpdate( sql ) ;
@@ -270,6 +263,9 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
         int iRC; // iRC is used to calculate bRC
         try
         {
+            RoomBookingDAO roomBookingDAO = new RoomBookingDAO();
+            roomBookingDAO.deleteByBookingId(pk);
+
             System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
 
             sql = "DELETE FROM Booking WHERE BookingId = " + pk + ";";

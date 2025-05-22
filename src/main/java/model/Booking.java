@@ -54,6 +54,14 @@ public class Booking
     // ----------------------------------------------------------------------
     // Getters
     // ----------------------------------------------------------------------
+    @Override
+    public String toString() {
+        return "Booking ID: " + iBookingId + "\n"
+                + "Customer ID: " + iCustomerId + "\n"
+                + "Start Date: " + startDate + "\n"
+                + "Nights: " + iNights + "\n";
+    }
+
     public int getIBookingId() {
         return iBookingId;
     }

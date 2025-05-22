@@ -89,6 +89,20 @@ public class Room
     // ----------------------------------------------------------------------
     // Getters
     // ----------------------------------------------------------------------
+    @Override
+    public String toString() {
+        return "Room Number: " + iRoomNumber + "\n" +
+                "Occupancy: " + iOccupancy + "\n" +
+                "Room Type: " + szRoomType + "\n" +
+                "Has Shower: " + bHasShower + "\n" +
+                "Has Jacuzzi: " + bHasJacuzzi + "\n" +
+                "Has Sea View: " + bHasSeaView + "\n" +
+                "Is Family Room: " + bIsFamilyRoom + "\n" +
+                "Is Honeymoon Room: " + bIsHoneymoonRoom + "\n" +
+                "Floor: " + iFloor + "\n" +
+                "Pounds Per Night: £" + iPoundsPerNight;
+    }
+
     public int getIRoomNumber() {
         return iRoomNumber;
     }

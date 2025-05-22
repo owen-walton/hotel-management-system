@@ -296,4 +296,38 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
 
         return bRC;
     }
+
+    public boolean deleteByBookingId(int bookingId)
+    {
+        boolean bRC = false;
+
+        int iRC; // iRC is used to calculate bRC
+        try
+        {
+            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
+
+            sql = "DELETE FROM RoomBooking WHERE BookingId = " + bookingId + ";";
+
+            sqlStatement = dbConnection.getConnection().createStatement() ;
+            iRC = sqlStatement.executeUpdate( sql ) ;
+
+            // iRC will hold how many records were updated or inserted.  zero is bad in this case.
+            if (iRC > 0)
+            {
+                bRC = true;
+            }
+        }
+        catch( SQLException se )
+        {
+            System.err.println( this.getClass().getName() + ":: SQL error:: " + se ) ;
+            se.printStackTrace() ;
+        }
+        catch ( Exception e )
+        {
+            System.err.println( this.getClass().getName() + ":: Error:: " + e ) ;
+            e.printStackTrace() ;
+        }
+
+        return bRC;
+    }
 }
