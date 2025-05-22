@@ -80,7 +80,7 @@ public class RoomDAO implements ReadOnlyDAO<Room>{
             resultSet = sqlStatement.executeQuery(sql);
             resultSet.next();
 
-            // store result of query in customer variable
+            // store result of query in room variable
             room = new Room(resultSet.getInt("RoomNumber"),
                     resultSet.getShort("Occupancy"),
                     resultSet.getString("RoomType"),

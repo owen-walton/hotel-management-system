@@ -75,7 +75,7 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
             resultSet = sqlStatement.executeQuery(sql);
             resultSet.next();
 
-            // store result of query in customer variable
+            // store result of query in booking variable
             booking = new Booking(
                     resultSet.getInt("BookingId"),
                     resultSet.getInt("CustomerId"),
@@ -208,7 +208,7 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
 
             sql = "UPDATE Booking SET ";
 
-            int count = 0; // can break out of function if all of customer's fields are null (nothing to update)
+            int count = 0; // can break out of function if all of booking's fields are null (nothing to update)
 
             // add all updates that aren't null
             if (booking.getICustomerId() != 0)
@@ -218,12 +218,12 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
             }
             if (booking.getStartDate() != null)
             {
-                sql = sql + "CustomerId = " + booking.getStartDate() + ", ";
+                sql = sql + "StartDate = " + booking.getStartDate() + ", ";
                 count++;
             }
-            if (booking.getINights() != -1)
+            if (booking.getINights() != 0)
             {
-                sql = sql + "CustomerId = " + booking.getINights() + ", ";
+                sql = sql + "Nights = " + booking.getINights() + ", ";
                 count++;
             }
 
@@ -232,7 +232,7 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
                 return false;
             }
 
-            sql = sql + " WHERE CustomerId = " + booking.getIBookingId() + ";";
+            sql = sql + " WHERE BookingId = " + booking.getIBookingId() + ";";
             // remove comma from last value
             if (sql.matches(", WHERE"))
             {
