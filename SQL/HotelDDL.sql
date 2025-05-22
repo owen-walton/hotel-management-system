@@ -53,7 +53,7 @@ CREATE TABLE Hotel.Room
 -- Create assign/join table for Room and Booking
 CREATE TABLE Hotel.RoomBooking
 (
-        RoomBookingID      INT     NOT NULL        AUTO_INCREMENT ,
+        RoomBookingId      INT     NOT NULL        AUTO_INCREMENT ,
         RoomNumber         INT     NOT NULL ,
         BookingId          INT     NOT NULL ,
         Occupants          SMALLINT     NOT NULL ,
