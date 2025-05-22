@@ -1,3 +1,10 @@
+/**
+ *
+ * This is a wrapper file used to handle interaction with Booking table in the database
+ * @author Owen Walton
+ *
+ **/
+
 package main.java.dao;
 
 import main.java.dbc.DBConnection;
