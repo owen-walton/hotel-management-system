@@ -17,8 +17,7 @@ public class DBConnection
     // There is a bug/feature with Java11 and MySQL.
     // https://bugs.mysql.com/bug.php?id=93590 for explanation into bug
     // "useSSL=false" is a workaround for the bug, works for Java11 & MySQL5
-    // final String DB_URL = "jdbc:mysql://localhost:3306/Hotel?useSSL=false"; (for codio)
-    final String DB_URL = "REQUIRED"; // (for my machine)
+    final String DB_URL = "jdbc:mysql://localhost:3306/Hotel?useSSL=false";
     final String USER = "root"; // database username
 
     // code is designed to support running on system "codio.uk", these values make code specific to the codio database
@@ -51,7 +50,8 @@ public class DBConnection
         try
         {
             System.err.println( this.getClass().getName() + "DBC: Connecting to database");
-            DriverManager.getDriver( DB_URL ) ;
+            // Load the driver class explicitly
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection( DB_URL , USER , PASS ) ;
             if ( conn != null )
             {
