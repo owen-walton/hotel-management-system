@@ -27,13 +27,14 @@ public class Customer
     private String szPostcode ;
     private String szPhoneNumber ;
     private String szEmail ;
+    private boolean isActive ;
 
     // ----------------------------------------------------------------------
     // Constructor
     // ----------------------------------------------------------------------
     public Customer(int iCustomerId, String szSurname, String szFirstName, String szTitle, Date DOB,
                     String szHouseNumber, String szStreetName, String szCity, String szPostcode,
-                    String szPhoneNumber, String szEmail)
+                    String szPhoneNumber, String szEmail, boolean isActive)
     {
         this.iCustomerId = iCustomerId;
         this.szSurname = szSurname;
@@ -46,6 +47,7 @@ public class Customer
         this.szPostcode = szPostcode;
         this.szPhoneNumber = szPhoneNumber;
         this.szEmail = szEmail;
+        this.isActive = isActive;
     }
 
     // ----------------------------------------------------------------------
@@ -95,6 +97,10 @@ public class Customer
         this.szEmail = szEmail;
     }
 
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
     // ----------------------------------------------------------------------
     // Getters
     // ----------------------------------------------------------------------
@@ -109,7 +115,8 @@ public class Customer
                 "City: " + szCity + "\n" +
                 "Postcode: " + szPostcode + "\n" +
                 "Phone Number: " + szPhoneNumber + "\n" +
-                "Email: " + szEmail;
+                "Email: " + szEmail + "\n" +
+                "Active: " + isActive;
     }
 
     public int getICustomerId() {
@@ -154,5 +161,9 @@ public class Customer
 
     public String getSzEmail() {
         return szEmail;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
     }
 }

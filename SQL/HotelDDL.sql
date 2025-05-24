@@ -20,6 +20,7 @@ CREATE TABLE Hotel.Customer
         Postcode        CHAR( 12 )      NOT NULL ,
         PhoneNumber     CHAR( 11 )      NOT NULL ,
         Email           CHAR( 40 )      NOT NULL ,
+        IsActive        BOOLEAN         NOT NULL ,
         PRIMARY KEY ( CustomerId )
 ) ;
 

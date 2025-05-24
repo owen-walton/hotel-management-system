@@ -16,7 +16,7 @@ public class Main {
         CustomerDAO customerDAO = new CustomerDAO();
 
         // Insert a customer
-        Customer newCustomer = new Customer(-1, "Bloggs" , "Joe" , "Mr" , new Date(10), "3" ,  "New Street" , "London" , "SE12 7LA" , "07890123456" , "bloggsj@gmail.com");
+        Customer newCustomer = new Customer(-1, "Bloggs" , "Joe" , "Mr" , new Date(10), "3" ,  "New Street" , "London" , "SE12 7LA" , "07890123456" , "bloggsj@gmail.com", true);
         boolean inserted = customerDAO.insert(newCustomer);
         System.out.println("Insert result: " + inserted);
 

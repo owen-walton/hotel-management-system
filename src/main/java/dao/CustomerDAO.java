@@ -73,6 +73,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
                     + ", Postcode"
                     + ", PhoneNumber"
                     + ", Email"
+                    + ", IsActive"
                     + " FROM Customer"
                     + " WHERE CustomerId = " + pk
                     + ";";
@@ -93,7 +94,8 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
                     resultSet.getString( "City" ),
                     resultSet.getString( "Postcode" ),
                     resultSet.getString( "PhoneNumber" ),
-                    resultSet.getString( "Email" ) );
+                    resultSet.getString( "Email" ),
+                    resultSet.getBoolean("IsActive: "));
 
             return customer;
         }
@@ -183,6 +185,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
                     + ", Postcode"
                     + ", PhoneNumber"
                     + ", Email"
+                    + ", IsActive"
                     + " ) "
                     + " VALUES( "
                     + "\"" + customer.getSzSurname()  + "\""
@@ -195,6 +198,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
                     + ", \"" + customer.getSzPostcode() + "\""
                     + ", \"" + customer.getSzPhoneNumber() + "\""
                     + ", \"" + customer.getSzEmail() + "\""
+                    + ", " + customer.getIsActive()
                     + " ) ; " ;
 
             sqlStatement = dbConnection.getConnection().createStatement() ;
@@ -232,67 +236,50 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
 
             sql = "UPDATE Customer SET ";
 
-            int count = 0; // can break out of function if all of customer's fields are null (nothing to update)
-
             // add all updates that aren't null
             if (customer.getSzSurname() != null)
             {
                 sql = sql + "Surname = '" + customer.getSzSurname() + "', ";
-                count++;
             }
             if (customer.getSzFirstName() != null)
             {
                 sql = sql + "FirstName = '" + customer.getSzFirstName() + "', ";
-                count++;
             }
             if (customer.getSzTitle() != null)
             {
                 sql = sql + "Title = '" + customer.getSzTitle() + "', ";
-                count++;
             }
             if (customer.getDOB() != null)
             {
                 sql = sql + "DOB = '" + customer.getDOB() + "', ";
-                count++;
             }
             if (customer.getSzHouseNumber() != null)
             {
                 sql = sql + "HouseNumber = '" + customer.getSzHouseNumber() + "', ";
-                count++;
             }
             if (customer.getSzStreetName() != null)
             {
                 sql = sql + "StreetName = '" + customer.getSzStreetName() + "', ";
-                count++;
             }
             if (customer.getSzCity() != null)
             {
                 sql = sql + "City = '" + customer.getSzCity() + "', ";
-                count++;
             }
             if (customer.getSzPostcode() != null)
             {
                 sql = sql + "Postcode = '" + customer.getSzPostcode() + "', ";
-                count++;
             }
             if (customer.getSzPhoneNumber() != null)
             {
                 sql = sql + "PhoneNumber = '" + customer.getSzPhoneNumber() + "', ";
-                count++;
             }
             if (customer.getSzEmail() != null)
             {
                 sql = sql + "Email = '" + customer.getSzEmail() + "', ";
-                count++;
             }
+            // no null value for IsActive so no check is done and is always updated
+            sql = sql + "IsActive = " + customer.getIsActive();
 
-            if (count == 0)
-            {
-                return false;
-            }
-
-            // remove tail comma (and space)
-            sql = sql.substring(0, sql.length() - 2);
             sql = sql + " WHERE CustomerId = " + customer.getICustomerId() + ";";
 
             sqlStatement = dbConnection.getConnection().createStatement() ;
@@ -318,11 +305,10 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         return bRC;
     }
 
+    // any occurrence of pk (customerId) in Booking must be deleted first (handled in service layer)
     @Override
     public boolean delete(int pk)
     {
-        // ------------------------------------- Currently doesn't work because customers are referenced in booking
-
         // bRC stores whether delete has worked
         boolean bRC = false;
         int iRC; // iRC is used to calculate bRC

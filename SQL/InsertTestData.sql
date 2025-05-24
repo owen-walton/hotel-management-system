@@ -4,9 +4,9 @@ USE Hotel ;
 -- Insert all data
 
 INSERT INTO Hotel.Customer ( Surname , FirstName , Title , DOB , HouseNumber , StreetName , City , Postcode , PhoneNumber, Email )
-        VALUES ( "Mouse" , "Mickey" , "Mr" , "1970-01-01" , "3" ,  "New Street" , "London" , "SE12 7LA" , "07890123456" , "mousem@gmail.com") ;
+        VALUES ( "Mouse" , "Mickey" , "Mr" , "1970-01-01" , "3" ,  "New Street" , "London" , "SE12 7LA" , "07890123456" , "mousem@gmail.com", TRUE) ;
 INSERT INTO Hotel.Customer ( Surname , FirstName , Title , DOB , HouseNumber , StreetName , City , Postcode , PhoneNumber, Email )
-        VALUES ( "Jones" , "Jane" , "Ms" , "1974-02-02" , "10" , "East Road" , "Cornwall" , "EX22 6LB" , "07986543210" , "janej@hotmail.com") ;
+        VALUES ( "Jones" , "Jane" , "Ms" , "1974-02-02" , "10" , "East Road" , "Cornwall" , "EX22 6LB" , "07986543210" , "janej@hotmail.com", TRUE) ;
 
 
 INSERT INTO Hotel.Booking ( CustomerId , StartDate , Nights)

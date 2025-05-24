@@ -255,6 +255,7 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
         return bRC;
     }
 
+    // any occurrence of pk (bookingId) in RoomBooking must be deleted first (handled in service layer)
     @Override
     public boolean delete(int pk)
     {
@@ -263,9 +264,6 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
         int iRC; // iRC is used to calculate bRC
         try
         {
-            RoomBookingDAO roomBookingDAO = new RoomBookingDAO();
-            roomBookingDAO.deleteByBookingId(pk);
-
             System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
 
             sql = "DELETE FROM Booking WHERE BookingId = " + pk + ";";
