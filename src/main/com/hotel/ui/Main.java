@@ -5,14 +5,14 @@
  * this is because foreign keys require deletion in correct order which will be handled once service layer is built
  */
 
-package main.java.ui;
+package main.com.hotel.ui;
 
-import main.java.dao.BookingDAO;
-import main.java.dao.CustomerDAO;
-import main.java.dao.RoomDAO;
-import main.java.model.Booking;
-import main.java.model.Customer;
-import main.java.model.Room;
+import main.com.hotel.dao.BookingDAO;
+import main.com.hotel.dao.CustomerDAO;
+import main.com.hotel.dao.RoomDAO;
+import main.com.hotel.model.Booking;
+import main.com.hotel.model.Customer;
+import main.com.hotel.model.Room;
 
 import java.sql.Date;
 import java.util.List;

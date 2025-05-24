@@ -4,7 +4,7 @@
  * Last edit: 21/05/25
  */
 
-package main.java.dbc;
+package main.com.hotel.dbc;
 
 import java.sql.* ;
 

@@ -6,7 +6,7 @@
  * Last edit: 21/05/25
  */
 
-package main.java.model;
+package main.com.hotel.model;
 
 public class RoomBooking
 {

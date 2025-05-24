@@ -1,21 +1,21 @@
 /**
  *
- * This is a wrapper file used to handle interaction with Customer table in the database
+ * This is a wrapper file used to handle interaction with Booking table in the database
  * @author Owen Walton
- * Current issue - Delete customer details function not active currently
- *                 whilst company decides what circumstance data is allowed to be deleted
  *
  **/
 
-package main.java.dao;
+package main.com.hotel.dao;
 
-import main.java.model.Customer;
-import main.java.dbc.DBConnection;
+import main.com.hotel.dbc.DBConnection;
+import main.com.hotel.model.Booking;
+
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer>{
+public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
     // ----------------------------------------------------------------------
     // Class variables
     // ----------------------------------------------------------------------
@@ -30,7 +30,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
     // ----------------------------------------------------------------------
     // Constructor
     // ----------------------------------------------------------------------
-    public CustomerDAO()
+    public BookingDAO()
     {
         reset() ;
         this.dbConnection = new DBConnection() ;
@@ -54,28 +54,20 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
     // Implementation of ReadOnlyDAO
     // ----------------------------------------------------------------------
     @Override
-    public Customer getByPK(int pk)
+    public Booking getByPK(int pk)
     {
-        Customer customer;
+        Booking booking;
 
         try {
             System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
 
             // create query
-            sql = "SELECT CustomerId"
-                    + ", Surname"
-                    + ", FirstName"
-                    + ", DOB"
-                    + ", Title"
-                    + ", HouseNumber"
-                    + ", StreetName"
-                    + ", City"
-                    + ", Postcode"
-                    + ", PhoneNumber"
-                    + ", Email"
-                    + ", IsActive"
-                    + " FROM Customer"
-                    + " WHERE CustomerId = " + pk
+            sql = "SELECT BookingId"
+                    + ", CustomerId"
+                    + ", StartDate"
+                    + ", Nights"
+                    + " FROM Booking"
+                    + " WHERE BookingId = " + pk
                     + ";";
 
             // execute query
@@ -83,21 +75,15 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
             resultSet = sqlStatement.executeQuery(sql);
             resultSet.next();
 
-            // store result of query in customer variable
-            customer = new Customer(resultSet.getInt("CustomerId"),
-                    resultSet.getString("Surname"),
-                    resultSet.getString("FirstName"),
-                    resultSet.getString("Title"),
-                    resultSet.getDate("DOB"),
-                    resultSet.getString("HouseNumber"),
-                    resultSet.getString( "StreetName" ),
-                    resultSet.getString( "City" ),
-                    resultSet.getString( "Postcode" ),
-                    resultSet.getString( "PhoneNumber" ),
-                    resultSet.getString( "Email" ),
-                    resultSet.getBoolean("IsActive: "));
+            // store result of query in booking variable
+            booking = new Booking(
+                    resultSet.getInt("BookingId"),
+                    resultSet.getInt("CustomerId"),
+                    resultSet.getDate("StartDate"),
+                    resultSet.getInt("Nights")
+            );
 
-            return customer;
+            return booking;
         }
         catch( SQLException se )
         {
@@ -106,7 +92,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
 
             return null;
         }
-		catch ( Exception e )
+        catch ( Exception e )
         {
             System.err.println( this.getClass().getName() + ": Error: " + e ) ;
             e.printStackTrace() ;
@@ -123,7 +109,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
             System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
 
             // create query
-            sql = "SELECT COUNT(*) AS total FROM Customer;";
+            sql = "SELECT COUNT(*) AS total FROM Booking;";
 
             // execute query
             sqlStatement = dbConnection.getConnection().createStatement();
@@ -150,22 +136,22 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
     }
 
     @Override
-    public List<Customer> getAll()
+    public List<Booking> getAll()
     {
-        List<Customer> customerList = new ArrayList<>();
+        List<Booking> bookingList = new ArrayList<>();
 
         for (int i = 1; i <= getNumRows(); i++)
         {
-            customerList.add(getByPK(i));
+            bookingList.add(getByPK(i));
         }
-        return customerList;
+        return bookingList;
     }
 
     // ----------------------------------------------------------------------
     // Implementation of WriteOnlyDAO
     // ----------------------------------------------------------------------
     @Override
-    public boolean insert(Customer customer)
+    public boolean insert(Booking booking)
     {
         // bRC stores whether insert has worked
         boolean bRC = false;
@@ -174,31 +160,14 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         {
             System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
 
-            sql = "INSERT INTO Customer( "
-                    + " Surname"
-                    + ", FirstName"
-                    + ", Title"
-                    + ", DOB"
-                    + ", HouseNumber"
-                    + ", StreetName"
-                    + ", City"
-                    + ", Postcode"
-                    + ", PhoneNumber"
-                    + ", Email"
-                    + ", IsActive"
+            sql = "INSERT INTO Booking( "
+                + "CustomerId"
+                + ", StartDate"
+                + ", Nights"
                     + " ) "
-                    + " VALUES( "
-                    + "\"" + customer.getSzSurname()  + "\""
-                    + ", \"" + customer.getSzFirstName() + "\""
-                    + ", \"" + customer.getSzTitle() + "\""
-                    + ", \"" + customer.getDOB() + "\""
-                    + ", \"" + customer.getSzHouseNumber() + "\""
-                    + ", \"" + customer.getSzStreetName() + "\""
-                    + ", \"" + customer.getSzCity() + "\""
-                    + ", \"" + customer.getSzPostcode() + "\""
-                    + ", \"" + customer.getSzPhoneNumber() + "\""
-                    + ", \"" + customer.getSzEmail() + "\""
-                    + ", " + customer.getIsActive()
+                    + " VALUES( " + booking.getICustomerId()
+                    + ", \"" + booking.getStartDate() + "\""
+                    + ", \"" + booking.getINights() + "\""
                     + " ) ; " ;
 
             sqlStatement = dbConnection.getConnection().createStatement() ;
@@ -225,7 +194,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
     }
 
     @Override
-    public boolean update(Customer customer)
+    public boolean update(Booking booking)
     {
         // bRC stores whether update has worked
         boolean bRC = false;
@@ -234,53 +203,34 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         {
             System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
 
-            sql = "UPDATE Customer SET ";
+            sql = "UPDATE Booking SET ";
+
+            int count = 0; // can break out of function if all of booking's fields are null (nothing to update)
 
             // add all updates that aren't null
-            if (customer.getSzSurname() != null)
+            if (booking.getICustomerId() != 0)
             {
-                sql = sql + "Surname = '" + customer.getSzSurname() + "', ";
+                sql = sql + "CustomerId = " + booking.getICustomerId() + ", ";
+                count++;
             }
-            if (customer.getSzFirstName() != null)
+            if (booking.getStartDate() != null)
             {
-                sql = sql + "FirstName = '" + customer.getSzFirstName() + "', ";
+                sql = sql + "StartDate = '" + booking.getStartDate() + "', ";
+                count++;
             }
-            if (customer.getSzTitle() != null)
+            if (booking.getINights() != 0)
             {
-                sql = sql + "Title = '" + customer.getSzTitle() + "', ";
+                sql = sql + "Nights = " + booking.getINights() + ", ";
+                count++;
             }
-            if (customer.getDOB() != null)
-            {
-                sql = sql + "DOB = '" + customer.getDOB() + "', ";
-            }
-            if (customer.getSzHouseNumber() != null)
-            {
-                sql = sql + "HouseNumber = '" + customer.getSzHouseNumber() + "', ";
-            }
-            if (customer.getSzStreetName() != null)
-            {
-                sql = sql + "StreetName = '" + customer.getSzStreetName() + "', ";
-            }
-            if (customer.getSzCity() != null)
-            {
-                sql = sql + "City = '" + customer.getSzCity() + "', ";
-            }
-            if (customer.getSzPostcode() != null)
-            {
-                sql = sql + "Postcode = '" + customer.getSzPostcode() + "', ";
-            }
-            if (customer.getSzPhoneNumber() != null)
-            {
-                sql = sql + "PhoneNumber = '" + customer.getSzPhoneNumber() + "', ";
-            }
-            if (customer.getSzEmail() != null)
-            {
-                sql = sql + "Email = '" + customer.getSzEmail() + "', ";
-            }
-            // no null value for IsActive so no check is done and is always updated
-            sql = sql + "IsActive = " + customer.getIsActive();
 
-            sql = sql + " WHERE CustomerId = " + customer.getICustomerId() + ";";
+            if (count == 0)
+            {
+                return false;
+            }
+
+            sql = sql.substring(0, sql.length() - 2);
+            sql = sql + " WHERE BookingId = " + booking.getIBookingId() + ";";
 
             sqlStatement = dbConnection.getConnection().createStatement() ;
             iRC = sqlStatement.executeUpdate( sql ) ;
@@ -305,7 +255,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         return bRC;
     }
 
-    // any occurrence of pk (customerId) in Booking must be deleted first (handled in service layer)
+    // any occurrence of pk (bookingId) in RoomBooking must be deleted first (handled in service layer)
     @Override
     public boolean delete(int pk)
     {
@@ -316,7 +266,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         {
             System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
 
-            sql = "DELETE FROM Customer WHERE CustomerId = " + pk + ";";
+            sql = "DELETE FROM Booking WHERE BookingId = " + pk + ";";
 
             sqlStatement = dbConnection.getConnection().createStatement() ;
             iRC = sqlStatement.executeUpdate( sql ) ;

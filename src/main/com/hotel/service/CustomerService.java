@@ -1,4 +1,4 @@
-package main.java.service;
+package main.com.hotel.service;
 
 public class CustomerService {
 }

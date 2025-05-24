@@ -1,4 +1,4 @@
-package main.java.role.access;
+package main.com.hotel.role.access;
 
 public class HeadCleanerAccess {
 }

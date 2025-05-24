@@ -5,10 +5,10 @@
  *
  **/
 
-package main.java.dao;
+package main.com.hotel.dao;
 
-import main.java.model.Room;
-import main.java.dbc.DBConnection;
+import main.com.hotel.model.Room;
+import main.com.hotel.dbc.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;

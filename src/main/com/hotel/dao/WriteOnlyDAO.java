@@ -3,7 +3,7 @@
  * @author Owen Walton
  */
 
-package main.java.dao;
+package main.com.hotel.dao;
 
 public interface WriteOnlyDAO<T>
 {
