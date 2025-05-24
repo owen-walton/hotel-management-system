@@ -1,3 +1,10 @@
+/**
+ * @author Owen Walton
+ * Test rig for programs methods
+ * All DAOs are completely tested excluding the .delete() functions,
+ * this is because foreign keys require deletion in correct order which will be handled once service layer is built
+ */
+
 package main.java.ui;
 
 import main.java.dao.BookingDAO;
@@ -40,9 +47,6 @@ public class Main {
         System.out.println("Update result: " + updated);
         System.out.println(foundCustomer);
 
-        // Delete customer
-        // boolean deleted = customerDAO.delete(foundCustomer.getICustomerId());
-        // System.out.println("Delete result: " + deleted);
 
         System.out.println("\n---------------------------------------------------------\n");
 
@@ -91,8 +95,6 @@ public class Main {
         System.out.println("Update result: " + bookingUpdated);
         System.out.println(foundBooking);
 
-        boolean deleted = bookingDAO.delete(foundBooking.getIBookingId());
-        System.out.println("Delete result: " + deleted);
 
         System.out.println("\n---------------------------------------------------------\n");
     }
