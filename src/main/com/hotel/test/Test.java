@@ -5,7 +5,7 @@
  * this is because foreign keys require deletion in correct order which will be handled once service layer is built
  */
 
-package main.com.hotel.ui;
+package main.com.hotel.test;
 
 import main.com.hotel.dao.BookingDAO;
 import main.com.hotel.dao.CustomerDAO;
@@ -17,7 +17,7 @@ import main.com.hotel.model.Room;
 import java.sql.Date;
 import java.util.List;
 
-public class Main {
+public class Test {
     public static void main(String[] args)
     {
         CustomerDAO customerDAO = new CustomerDAO();
