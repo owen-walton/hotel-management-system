@@ -1,5 +1,6 @@
 /**
  * @author Owen Walton
+ * Login must be edited to include authentication
  * Allows login and calls .run() from the corresponding ui class
  * as rest of program is coded, more functionality may become required after ui.run();
  */
@@ -15,6 +16,7 @@ public class MainApp
         Roles userRole = login();
         BaseUI ui;
 
+        System.out.println(userRole);
         switch (userRole) {
             case CONCIERGE -> ui = new ConciergeUI();
             case HEAD_CLEANER   -> ui = new HeadCleanerUI();
@@ -31,17 +33,19 @@ public class MainApp
         Roles role;
         String input;
 
-        input = InputHelper.inputLetterMultipleChoice(3, "What is your role at the company?\n" +
-                "A) Concierge\n" +
-                "B) Head Cleaner\n" +
-                "C) Head Chef\n" +
-                "Enter a letter: ");
+        input = InputHelper.inputLetterMultipleChoice(3, """
+                What is your role at the company?
+                A) Concierge
+                B) Head Cleaner
+                C) Head Chef
+                Enter a letter:\s""");
+        input = input.toUpperCase();
 
         role = switch (input) {
             case "A" -> Roles.CONCIERGE;
             case "B" -> Roles.HEAD_CLEANER;
             case "C" -> Roles.HEAD_CHEF;
-            default -> null;
+            default -> throw new IllegalStateException("Unexpected value: " + input);
         };
 
         return role;

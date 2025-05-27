@@ -147,6 +147,54 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
         return roomBookingList;
     }
 
+    public int getOccupantsByBookingId(int bookingId)
+    {
+        int occupants;
+
+        try {
+            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+
+            // create query
+            sql = "SELECT SUM(Occupants) AS total_occupants "
+                    + "FROM RoomBooking "
+                    + "WHERE BookingId = " + bookingId
+                    + ";";
+
+            // execute query
+            sqlStatement = dbConnection.getConnection().createStatement();
+            resultSet = sqlStatement.executeQuery(sql);
+            if (resultSet.next())
+            {
+                // store result of query in room booking variable
+                occupants = resultSet.getInt("total_occupants");
+                if (resultSet.wasNull())
+                {
+                    occupants = 0;
+                }
+            }
+            else
+            {
+                occupants = 0;
+            }
+
+            return occupants;
+        }
+        catch( SQLException se )
+        {
+            System.err.println( this.getClass().getName() + ": SQL error: " + se ) ;
+            se.printStackTrace();
+
+            return -1;
+        }
+        catch ( Exception e )
+        {
+            System.err.println( this.getClass().getName() + ": Error: " + e ) ;
+            e.printStackTrace() ;
+
+            return -1;
+        }
+
+    }
     // ----------------------------------------------------------------------
     // Implementation of WriteOnlyDAO
     // ----------------------------------------------------------------------

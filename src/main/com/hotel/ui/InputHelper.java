@@ -36,9 +36,39 @@ final class InputHelper {
                 }
             }
 
-            System.out.print("Please enter a valid letter: ");
+            System.out.println("Please enter a valid letter.");
         }
 
+    }
+
+    public static int inputInteger(int lowerBoundIncl, int upperBoundIncl, String prompt)
+    {
+        Scanner sc = new Scanner(System.in);
+        int iOut;
+
+        System.out.print(prompt);
+
+        while (true)
+        {
+            System.out.print(prompt);
+
+            if (sc.hasNextInt())
+            {
+                iOut = sc.nextInt();
+                sc.nextLine();
+
+                if (iOut >= lowerBoundIncl && iOut <= upperBoundIncl)
+                {
+                    return iOut;
+                }
+            }
+            else
+            {
+                sc.nextLine(); // flush out sc
+            }
+
+            System.out.println("Please enter a valid number between " + (lowerBoundIncl) + " and " + (upperBoundIncl) + ".");
+        }
     }
 
 }

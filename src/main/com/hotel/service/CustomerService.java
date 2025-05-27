@@ -1,4 +1,10 @@
 package main.com.hotel.service;
 
-public class CustomerService {
+public class CustomerService
+{
+    public CustomerService()
+    {
+
+    }
+
 }
