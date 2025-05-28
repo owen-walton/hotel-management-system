@@ -17,15 +17,15 @@ public class HeadChefUI implements BaseUI
         int iDays;
 
         iDays = InputHelper.inputInteger(1, 21, "How many days do you want to retrieve the guest count for? (Max 21): ");
-        outputNumberOfGuestsForBreakfast(iDays);
+        displayNumberOfGuestsForBreakfast(iDays);
     }
 
-    public void outputNumberOfGuestsForBreakfast(int iDays)
+    public void displayNumberOfGuestsForBreakfast(int iDays)
     {
         Object[][] numOfGuests = access.getNumOfGuestsForBreakfast(iDays);
 
         System.out.printf("%-15s | %-25s%n", "Date", "Guests that require breakfast");
-        System.out.println("-----------------+---------------------------");
+        System.out.println("----------------+----------------------------");
 
         for (int i = 0; i < numOfGuests[0].length; i++)
         {

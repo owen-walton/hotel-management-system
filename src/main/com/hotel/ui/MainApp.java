@@ -16,7 +16,6 @@ public class MainApp
         Roles userRole = login();
         BaseUI ui;
 
-        System.out.println(userRole);
         switch (userRole) {
             case CONCIERGE -> ui = new ConciergeUI();
             case HEAD_CLEANER   -> ui = new HeadCleanerUI();

@@ -1,4 +1,9 @@
 package main.com.hotel.role.access;
 
-public class ConciergeAccess {
+public class ConciergeAccess
+{
+    public ConciergeAccess()
+    {
+
+    }
 }

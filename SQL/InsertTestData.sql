@@ -14,7 +14,7 @@ VALUES
 
 INSERT INTO Hotel.Booking (CustomerId, StartDate, Nights)
 VALUES
-(1, '2025-06-01', 3),
+(1, '2025-05-25', 3),
 (2, '2025-06-02', 2),
 (3, '2025-06-05', 4),
 (4, '2025-06-03', 1),

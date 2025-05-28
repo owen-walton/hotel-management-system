@@ -3,6 +3,7 @@ package main.com.hotel.service;
 import main.com.hotel.dao.BookingDAO;
 import main.com.hotel.dao.RoomBookingDAO;
 import main.com.hotel.model.Booking;
+import main.com.hotel.model.RoomBooking;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -70,5 +71,27 @@ public class BookingService {
         }
 
         return activeBookingIds;
+    }
+
+    public List<Integer> getRoomNumbersEndingByDate(Date date)
+    {
+        List<Integer> endingRoomNumbers = new ArrayList<>();
+        List<Booking> allBookings = bookingDAO.getAll();
+
+        for (Booking booking : allBookings)
+        {
+            final LocalDate END_DATE = booking.getStartDate().toLocalDate().plusDays(booking.getINights());
+
+                if (END_DATE.equals(date.toLocalDate()))
+                {
+                    List<RoomBooking> roomBookingsEnding = roomBookingDAO.getByBookingId(booking.getIBookingId());
+                    for (RoomBooking endingRoomBooking : roomBookingsEnding)
+                    {
+                        endingRoomNumbers.add(endingRoomBooking.getIRoomNumber());
+                    }
+                }
+        }
+
+        return endingRoomNumbers;
     }
 }
