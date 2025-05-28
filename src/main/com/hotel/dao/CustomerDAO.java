@@ -9,7 +9,8 @@
 
 package main.com.hotel.dao;
 
-import main.com.hotel.model.Customer;
+import main.com.hotel.model.criteria.CustomerSearchDetails;
+import main.com.hotel.model.entity.Customer;
 import main.com.hotel.dbc.DBConnection;
 import java.sql.*;
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
                     resultSet.getString( "Postcode" ),
                     resultSet.getString( "PhoneNumber" ),
                     resultSet.getString( "Email" ),
-                    resultSet.getBoolean("IsActive: "));
+                    resultSet.getBoolean("IsActive "));
 
             return customer;
         }
@@ -154,13 +155,63 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
     {
         List<Customer> customerList = new ArrayList<>();
 
-        for (int i = 1; i <= getNumRows(); i++)
-        {
-            customerList.add(getByPK(i));
-        }
-        return customerList;
-    }
+        try {
+            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
 
+            // create query
+            sql = "SELECT CustomerId"
+                    + ", Surname"
+                    + ", FirstName"
+                    + ", DOB"
+                    + ", Title"
+                    + ", HouseNumber"
+                    + ", StreetName"
+                    + ", City"
+                    + ", Postcode"
+                    + ", PhoneNumber"
+                    + ", Email"
+                    + ", IsActive"
+                    + " FROM Customer"
+                    + ";";
+
+            // execute query
+            sqlStatement = dbConnection.getConnection().createStatement();
+            resultSet = sqlStatement.executeQuery(sql);
+
+            // store result of query in customer variable
+            while (resultSet.next())
+            {
+                customerList.add(new Customer(resultSet.getInt("CustomerId"),
+                        resultSet.getString("Surname"),
+                        resultSet.getString("FirstName"),
+                        resultSet.getString("Title"),
+                        resultSet.getDate("DOB"),
+                        resultSet.getString("HouseNumber"),
+                        resultSet.getString( "StreetName" ),
+                        resultSet.getString( "City" ),
+                        resultSet.getString( "Postcode" ),
+                        resultSet.getString( "PhoneNumber" ),
+                        resultSet.getString( "Email" ),
+                        resultSet.getBoolean("IsActive ")));
+            }
+
+            return customerList;
+        }
+        catch( SQLException se )
+        {
+            System.err.println( this.getClass().getName() + ": SQL error: " + se ) ;
+            se.printStackTrace();
+
+            return null;
+        }
+        catch ( Exception e )
+        {
+            System.err.println( this.getClass().getName() + ": Error: " + e ) ;
+            e.printStackTrace() ;
+
+            return null;
+        }
+    }
     // ----------------------------------------------------------------------
     // Implementation of WriteOnlyDAO
     // ----------------------------------------------------------------------
