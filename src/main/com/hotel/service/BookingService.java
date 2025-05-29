@@ -118,4 +118,26 @@ public class BookingService {
 
         return new BookingResult(booking, roomBookings);
     }
+
+    public List<RoomBooking> getOverlappingRoomBookings(Date startDate, int nights)
+    {
+        List<Booking> allBookings = bookingDAO.getAll();
+        List<RoomBooking> overlappingRoomBookings = new ArrayList<>();
+        final LocalDate START_DATE = startDate.toLocalDate();
+        final LocalDate END_DATE = START_DATE.plusDays(nights);
+
+        for (Booking booking : allBookings)
+        {
+            LocalDate bookingStartDate = booking.getStartDate().toLocalDate();
+            LocalDate bookingEndDate = bookingStartDate.plusDays(booking.getINights());
+
+            // bookings are allowed to end and start on same day (end in morning, start in afternoon)
+            // if booking overlaps
+            if (START_DATE.isBefore(bookingEndDate) && END_DATE.isAfter(bookingStartDate))
+            {
+                overlappingRoomBookings.addAll(roomBookingDAO.getByBookingId(booking.getIBookingId()));
+            }
+        }
+        return overlappingRoomBookings;
+    }
 }

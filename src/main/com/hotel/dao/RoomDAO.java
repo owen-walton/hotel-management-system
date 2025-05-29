@@ -7,6 +7,7 @@
 
 package main.com.hotel.dao;
 
+import main.com.hotel.model.criteria.RoomDetails;
 import main.com.hotel.model.entity.Room;
 import main.com.hotel.dbc.DBConnection;
 
@@ -149,11 +150,146 @@ public class RoomDAO implements ReadOnlyDAO<Room>{
     {
         List<Room> roomList = new ArrayList<>();
 
-        for (int i = 1; i <= getNumRows(); i++)
-        {
-            roomList.add(getByPK(i));
+        try {
+            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+
+            // create query
+            sql = "SELECT RoomNumber"
+                    + ", Occupancy"
+                    + ", RoomType"
+                    + ", HasShower"
+                    + ", HasJacuzzi"
+                    + ", HasSeaView"
+                    + ", IsFamilyRoom"
+                    + ", IsHoneymoonRoom"
+                    + ", Floor"
+                    + ", PoundsPerNight"
+                    + " FROM Room"
+                    + ";";
+
+            // execute query
+            sqlStatement = dbConnection.getConnection().createStatement();
+            resultSet = sqlStatement.executeQuery(sql);
+
+            // store result of query in room variable
+            while(resultSet.next())
+            {
+                roomList.add(new Room(resultSet.getInt("RoomNumber"),
+                        resultSet.getShort("Occupancy"),
+                        resultSet.getString("RoomType"),
+                        resultSet.getBoolean("HasShower"),
+                        resultSet.getBoolean("HasJacuzzi"),
+                        resultSet.getBoolean("HasSeaView"),
+                        resultSet.getBoolean( "IsFamilyRoom" ),
+                        resultSet.getBoolean( "IsHoneymoonRoom" ),
+                        resultSet.getShort( "Floor" ),
+                        resultSet.getInt( "PoundsPerNight" )));
+
+            }
+
+            return roomList;
         }
-        return roomList;
+        catch( SQLException se )
+        {
+            System.err.println( this.getClass().getName() + ": SQL error: " + se ) ;
+            se.printStackTrace();
+
+            return null;
+        }
+        catch ( Exception e )
+        {
+            System.err.println( this.getClass().getName() + ": Error: " + e ) ;
+            e.printStackTrace() ;
+
+            return null;
+        }
     }
 
+    public List<Room> getMatchingRooms(int occupants, RoomDetails details)
+    {
+        List<Room> roomList = new ArrayList<>();
+
+        try {
+            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+
+            // create query
+            sql = "SELECT RoomNumber"
+                    + ", Occupancy"
+                    + ", RoomType"
+                    + ", HasShower"
+                    + ", HasJacuzzi"
+                    + ", HasSeaView"
+                    + ", IsFamilyRoom"
+                    + ", IsHoneymoonRoom"
+                    + ", Floor"
+                    + ", PoundsPerNight"
+                    + " FROM Room"
+                    + " WHERE";
+
+            sql += " Occupancy >= " + occupants;
+
+            if (details.roomType() != null)
+            {
+                sql += " AND RoomType = '" + details.roomType() + "'";
+            }
+            if (details.hasShower() != null)
+            {
+                sql += " AND HasShower = " + details.hasShower();
+            }
+            if (details.hasJacuzzi() != null)
+            {
+                sql += " AND HasJacuzzi = " + details.hasJacuzzi();
+            }
+            if (details.hasSeaView() != null)
+            {
+                sql += " AND HasSeaView = " + details.hasSeaView();
+            }
+            if (details.isFamilyRoom() != null)
+            {
+                sql += " AND IsFamilyRoom = " + details.isFamilyRoom();
+            }
+            if (details.isHoneymoonRoom() != null)
+            {
+                sql += " AND IsHoneymoonRoom = " + details.isHoneymoonRoom();
+            }
+
+            sql += ";";
+
+            // execute query
+            sqlStatement = dbConnection.getConnection().createStatement();
+            resultSet = sqlStatement.executeQuery(sql);
+
+            // store result of query in room variable
+            while(resultSet.next())
+            {
+                roomList.add(new Room(resultSet.getInt("RoomNumber"),
+                        resultSet.getShort("Occupancy"),
+                        resultSet.getString("RoomType"),
+                        resultSet.getBoolean("HasShower"),
+                        resultSet.getBoolean("HasJacuzzi"),
+                        resultSet.getBoolean("HasSeaView"),
+                        resultSet.getBoolean( "IsFamilyRoom" ),
+                        resultSet.getBoolean( "IsHoneymoonRoom" ),
+                        resultSet.getShort( "Floor" ),
+                        resultSet.getInt( "PoundsPerNight" )));
+
+            }
+
+            return roomList;
+        }
+        catch( SQLException se )
+        {
+            System.err.println( this.getClass().getName() + ": SQL error: " + se ) ;
+            se.printStackTrace();
+
+            return null;
+        }
+        catch ( Exception e )
+        {
+            System.err.println( this.getClass().getName() + ": Error: " + e ) ;
+            e.printStackTrace() ;
+
+            return null;
+        }
+    }
 }

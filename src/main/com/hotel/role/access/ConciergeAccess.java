@@ -5,11 +5,13 @@ import main.com.hotel.model.criteria.RoomDetails;
 import main.com.hotel.model.entity.BookingResult;
 import main.com.hotel.model.entity.Customer;
 import main.com.hotel.model.entity.Room;
+import main.com.hotel.model.entity.RoomBooking;
 import main.com.hotel.service.BookingService;
 import main.com.hotel.service.CustomerService;
 import main.com.hotel.service.RoomService;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,10 +43,34 @@ public class ConciergeAccess
         return customerService.findCustomer(details);
     }
 
-    // take in room details
     public List<Room> getAvailableRooms(Date startDate, int nights, int occupants, RoomDetails roomDetails)
     {
-        return null;
+        List<Room> matchingRooms = roomService.getMatchingRooms(occupants, roomDetails);
+        List<RoomBooking> busyRooms = bookingService.getOverlappingRoomBookings(startDate, nights);
+        List<Room> availableRooms = new ArrayList<>();
+
+        for (Room room : matchingRooms)
+        {
+            boolean isBusy = false;
+
+            int roomNumber = room.getIRoomNumber();
+
+            for (RoomBooking busyRoom : busyRooms)
+            {
+                if (busyRoom.getIRoomNumber() == roomNumber)
+                {
+                    isBusy = true;
+                    break;
+                }
+            }
+
+            if (!isBusy)
+            {
+                availableRooms.add(room);
+            }
+        }
+
+        return availableRooms;
     }
 
     public Room getCheapestRoom(List<Room> rooms)

@@ -1,6 +1,7 @@
 package main.com.hotel.service;
 
 import main.com.hotel.dao.RoomDAO;
+import main.com.hotel.model.criteria.RoomDetails;
 import main.com.hotel.model.entity.Room;
 
 import java.util.HashMap;
@@ -37,5 +38,10 @@ public class RoomService
             }
         }
         return cheapest;
+    }
+
+    public List<Room> getMatchingRooms(int occupants, RoomDetails details)
+    {
+        return roomDAO.getMatchingRooms(occupants, details);
     }
 }

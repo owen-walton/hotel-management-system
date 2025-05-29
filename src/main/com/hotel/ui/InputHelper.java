@@ -8,6 +8,7 @@ package main.com.hotel.ui;
 import main.com.hotel.model.criteria.RoomDetails;
 
 import java.sql.Date;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -150,26 +151,40 @@ final class InputHelper {
 
     public static Date inputDate(LocalDate lowerBoundIcl, LocalDate upperBoundIncl, String prompt)
     {
-        boolean isDateInvalid = true;
         Date date = null;
-        while(isDateInvalid)
+        boolean isDateInvalid = true;
+
+        while (isDateInvalid)
         {
             System.out.println(prompt);
             isDateInvalid = false;
-            System.out.println("Enter in the form. DD/MM/YYYY");
-            int day = InputHelper.inputInteger(lowerBoundIcl.getDayOfMonth(), upperBoundIncl.getDayOfMonth(), "Enter DD: ");
-            int month = InputHelper.inputInteger(lowerBoundIcl.getMonthValue(), upperBoundIncl.getMonthValue(), "Enter MM: ");
-            int year = InputHelper.inputInteger(lowerBoundIcl.getYear(), upperBoundIncl.getYear(), "Enter YYYY: ");
+            System.out.println("Enter in the form: DD/MM/YYYY");
+
+            int day = InputHelper.inputInteger(1, 31, "Enter DD: ");
+            int month = InputHelper.inputInteger(1, 12, "Enter MM: ");
+            int year = InputHelper.inputInteger(1, 4000, "Enter YYYY: ");
+
             try {
-                date = Date.valueOf(year + "-" + month + "-" + day);
-            } catch (IllegalArgumentException e) {
-                // catches dates like feb 30th which don't exist
-                isDateInvalid = true;
+                LocalDate inputDate = LocalDate.of(year, month, day);
+
+                if (inputDate.isBefore(lowerBoundIcl) || inputDate.isAfter(upperBoundIncl))
+                {
+                    System.out.println("The date must be between " + lowerBoundIcl + " and " + upperBoundIncl);
+                    isDateInvalid = true;
+                }
+                else
+                {
+                    date = Date.valueOf(inputDate);
+                }
+
+            } catch (DateTimeException e) {
                 System.out.println("The date you entered is invalid.");
+                isDateInvalid = true;
             }
         }
         return date;
     }
+
     public static RoomDetails inputRoomDetails()
     {
         String roomType = InputHelper.inputString("Enter the room type (e.g., Single, Double, Suite) or press Enter for any: ");
