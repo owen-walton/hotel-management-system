@@ -97,7 +97,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
                     resultSet.getString( "Postcode" ),
                     resultSet.getString( "PhoneNumber" ),
                     resultSet.getString( "Email" ),
-                    resultSet.getBoolean("IsActive "));
+                    resultSet.getBoolean("IsActive"));
 
             return customer;
         }
@@ -193,7 +193,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
                         resultSet.getString( "Postcode" ),
                         resultSet.getString( "PhoneNumber" ),
                         resultSet.getString( "Email" ),
-                        resultSet.getBoolean("IsActive ")));
+                        resultSet.getBoolean("IsActive")));
             }
 
             return customerList;

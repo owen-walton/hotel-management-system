@@ -260,14 +260,12 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
             System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
 
             sql = "INSERT INTO RoomBooking( "
-                    + "RoomBookingId"
-                    + ", RoomNumber"
+                    + "RoomNumber"
                     + ", BookingId"
                     + ", Occupants"
                     + " ) "
                     + " VALUES( "
-                    + "\"" + roomBooking.getIRoomBookingID()  + "\""
-                    + ", \"" + roomBooking.getIRoomNumber() + "\""
+                    + "\"" + roomBooking.getIRoomNumber() + "\""
                     + ", \"" + roomBooking.getIBookingId() + "\""
                     + ", \"" + roomBooking.getIOccupants() + "\""
                     + " ) ; " ;

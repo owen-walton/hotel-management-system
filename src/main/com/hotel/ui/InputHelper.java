@@ -86,9 +86,39 @@ final class InputHelper {
             input = sc.nextLine();
 
             // check that there is no semicolon for sql injection precaution
-            if (input != null && !input.contains(";"))
+            if (input != null && !input.contains(";") && !input.isEmpty())
             {
                 return input; // Return the valid input
+            }
+            else
+            {
+                System.out.println("Please enter a valid string.");
+            }
+        }
+    }
+
+    public static String inputStringNullable(String prompt)
+    {
+        Scanner sc = new Scanner(System.in);
+        String input;
+
+        while (true)
+        {
+            System.out.print(prompt);
+
+            input = sc.nextLine();
+
+            // check that there is no semicolon for sql injection precaution
+            if (input != null && !input.contains(";"))
+            {
+                if(input.trim().isEmpty())
+                {
+                    return null;
+                }
+                else
+                {
+                    return input; // Return the valid input
+                }
             }
             else
             {
@@ -187,7 +217,7 @@ final class InputHelper {
 
     public static RoomDetails inputRoomDetails()
     {
-        String roomType = InputHelper.inputString("Enter the room type (e.g., Single, Double, Suite) or press Enter for any: ");
+        String roomType = InputHelper.inputStringNullable("Enter the room type (e.g., Single, Double, Suite) or press Enter for any: ");
         Boolean hasShower = InputHelper.inputYNNullable("Does the room have a shower? (Y/N or press Enter for any): ");
         Boolean hasJacuzzi = InputHelper.inputYNNullable("Does the room have a jacuzzi? (Y/N or press Enter for any): ");
         Boolean hasSeaView = InputHelper.inputYNNullable("Does the room have a sea view? (Y/N or press Enter for any): ");
