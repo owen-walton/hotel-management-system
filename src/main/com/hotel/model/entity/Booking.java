@@ -6,7 +6,7 @@
  * Last edit: 21/05/25
  */
 
-package main.com.hotel.model;
+package main.com.hotel.model.entity;
 
 import java.sql.Date;
 

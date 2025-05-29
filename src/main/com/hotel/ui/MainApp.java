@@ -38,9 +38,9 @@ public class MainApp
                 B) Head Cleaner
                 C) Head Chef
                 Enter a letter:\s""");
-        input = input.toUpperCase();
 
-        role = switch (input) {
+        role = switch (input)
+        {
             case "A" -> Roles.CONCIERGE;
             case "B" -> Roles.HEAD_CLEANER;
             case "C" -> Roles.HEAD_CHEF;

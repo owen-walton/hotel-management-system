@@ -31,7 +31,7 @@ final class InputHelper {
                 {
                     if(szOut.toLowerCase().charAt(0) == (char)(i + 97))
                     {
-                        return szOut;
+                        return szOut.toUpperCase();
                     }
                 }
             }
@@ -45,8 +45,6 @@ final class InputHelper {
     {
         Scanner sc = new Scanner(System.in);
         int iOut;
-
-        System.out.print(prompt);
 
         while (true)
         {
@@ -68,6 +66,53 @@ final class InputHelper {
             }
 
             System.out.println("Please enter a valid number between " + (lowerBoundIncl) + " and " + (upperBoundIncl) + ".");
+        }
+    }
+
+    public static String inputString(String prompt)
+    {
+        Scanner sc = new Scanner(System.in);
+        String input;
+
+        while (true)
+        {
+            System.out.print(prompt);
+
+            input = sc.nextLine();
+
+            // check input is not empty and that there is no semicolon for sql injection precaution
+            if (input != null && !input.trim().isEmpty() && !input.contains(";"))
+            {
+                return input; // Return the valid input
+            }
+            else
+            {
+                System.out.println("Please enter a valid string (not empty).");
+            }
+        }
+    }
+
+    public static boolean inputYN(String prompt) {
+        Scanner sc = new Scanner(System.in);
+        String input;
+
+        while (true)
+        {
+            System.out.print(prompt);
+            input = sc.nextLine().trim().toUpperCase();
+
+            if (input.equals("Y"))
+            {
+                return true; // User answered 'Yes'
+            }
+            else if (input.equals("N"))
+            {
+                return false; // User answered 'No'
+            }
+            else
+            {
+                System.out.println("Invalid input. Please enter 'Y' for Yes or 'N' for No.");
+            }
         }
     }
 

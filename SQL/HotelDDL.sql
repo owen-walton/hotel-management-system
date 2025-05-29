@@ -18,8 +18,8 @@ CREATE TABLE Hotel.Customer
         StreetName      CHAR( 100 )      NOT NULL ,
         City            CHAR( 30 )      NOT NULL ,
         Postcode        CHAR( 12 )      NOT NULL ,
-        PhoneNumber     CHAR( 11 )      NOT NULL ,
-        Email           CHAR( 40 )      NOT NULL ,
+        PhoneNumber     CHAR( 11 )      NOT NULL     UNIQUE ,
+        Email           CHAR( 40 )      NOT NULL     UNIQUE ,
         IsActive        BOOLEAN         NOT NULL ,
         PRIMARY KEY ( CustomerId )
 ) ;

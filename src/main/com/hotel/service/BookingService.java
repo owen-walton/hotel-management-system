@@ -2,8 +2,8 @@ package main.com.hotel.service;
 
 import main.com.hotel.dao.BookingDAO;
 import main.com.hotel.dao.RoomBookingDAO;
-import main.com.hotel.model.Booking;
-import main.com.hotel.model.RoomBooking;
+import main.com.hotel.model.entity.Booking;
+import main.com.hotel.model.entity.RoomBooking;
 
 import java.sql.Date;
 import java.time.LocalDate;

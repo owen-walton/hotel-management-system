@@ -10,9 +10,9 @@ package main.com.hotel.test;
 import main.com.hotel.dao.BookingDAO;
 import main.com.hotel.dao.CustomerDAO;
 import main.com.hotel.dao.RoomDAO;
-import main.com.hotel.model.Booking;
-import main.com.hotel.model.Customer;
-import main.com.hotel.model.Room;
+import main.com.hotel.model.entity.Booking;
+import main.com.hotel.model.entity.Customer;
+import main.com.hotel.model.entity.Room;
 
 import java.sql.Date;
 import java.util.List;

@@ -8,7 +8,7 @@
 package main.com.hotel.dao;
 
 import main.com.hotel.dbc.DBConnection;
-import main.com.hotel.model.Booking;
+import main.com.hotel.model.entity.Booking;
 
 import java.sql.*;
 

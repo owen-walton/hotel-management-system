@@ -6,7 +6,7 @@
  * Last edit: 21/05/25
  */
 
-package main.com.hotel.model;
+package main.com.hotel.model.entity;
 
 import java.sql.Date;
 
@@ -32,6 +32,11 @@ public class Customer
     // ----------------------------------------------------------------------
     // Constructor
     // ----------------------------------------------------------------------
+    public Customer()
+    {
+        clearAttributes();
+    }
+
     public Customer(int iCustomerId, String szSurname, String szFirstName, String szTitle, Date DOB,
                     String szHouseNumber, String szStreetName, String szCity, String szPostcode,
                     String szPhoneNumber, String szEmail, boolean isActive)
@@ -53,6 +58,22 @@ public class Customer
     // ----------------------------------------------------------------------
     // Setters
     // ----------------------------------------------------------------------
+    public void clearAttributes()
+    {
+        this.iCustomerId = -1;
+        this.szSurname = null;
+        this.szFirstName = null;
+        this.szTitle = null;
+        this.DOB = null;
+        this.szHouseNumber = null;
+        this.szStreetName = null;
+        this.szCity = null;
+        this.szPostcode = null;
+        this.szPhoneNumber = null;
+        this.szEmail = null;
+        this.isActive = false;
+    }
+
     public void setICustomerId(int iCustomerId) {
         this.iCustomerId = iCustomerId;
     }
