@@ -1,13 +1,17 @@
 package main.com.hotel.ui;
 
 import main.com.hotel.model.criteria.CustomerSearchDetails;
+import main.com.hotel.model.criteria.RoomDetails;
+import main.com.hotel.model.entity.BookingResult;
 import main.com.hotel.model.entity.Customer;
 import main.com.hotel.model.entity.Room;
 import main.com.hotel.role.access.ConciergeAccess;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ConciergeUI implements BaseUI
 {
@@ -52,7 +56,7 @@ public class ConciergeUI implements BaseUI
             input = InputHelper.inputLetterMultipleChoice(6, """
                     What would you like to do?
                     A) Make a booking
-                    B) Edit/cancel a booking
+                    B) Edit/cancel/find a booking
                     C) Edit/delete customer details
                     D) Retrieve customer details
                     E) Access customer detail logs
@@ -75,23 +79,47 @@ public class ConciergeUI implements BaseUI
     public boolean makeBooking()
     {
         int numOfRooms;
+        Map<Integer, Integer> selectedRooms = new HashMap<>();
 
         System.out.println("\nMake Booking:");
+
+        // find customer if not create new customer and add to db
         if(!findCurrentCustomer())
         {
-            createCustomer();
-        }
-        InputHelper.inputString("INPUT BOOKING DETAILS");
-        numOfRooms = InputHelper.inputInteger(1, 20, "How many rooms do you want to book?");
-        for (int i = 0; i < numOfRooms; i++)
-        {
-            if(!findRoomForCustomer()) // ROOMS MUST BE ADDED TO A MAP ONCE FOUND
+            if (!createCustomer())
             {
                 return false;
             }
         }
-        // ADD MAP TO ROOMBOOKING TABLE AND ADD BOOKING DETAILS TO BOOKING TABLE
 
+        // input booking data
+        int iNights = InputHelper.inputInteger(1, 15, "Enter number of nights they would like to book for: ");
+        Date startDate = InputHelper.inputDate(LocalDate.now(), LocalDate.now().plusYears(1), "Enter the date they would like to booking to start.");
+
+        numOfRooms = InputHelper.inputInteger(1, 20, "How many rooms do you want to book?");
+
+        // for every room required, run findRoomForCustomer
+        for (int i = 0; i < numOfRooms; i++)
+        {
+            Map<Integer,Integer> temp = findRoomForCustomer(startDate, iNights);
+            if(temp == null)
+            {
+                System.out.println("Booking cancelled.");
+                return false;
+            }
+            else
+            {
+                selectedRooms.putAll(temp);
+            }
+        }
+
+        // THIS IS WHERE PAYMENT IS HANDLED
+
+        // add Booking details to booking table and add selectedRooms map to RoomBooking table
+        BookingResult result = access.addBooking(getCurrentCustomer().getICustomerId(), startDate, iNights, selectedRooms);
+
+        // confirm booking
+        System.out.println("Booking confirmed. Here are the details:\n" + result);
         return true;
     }
 
@@ -125,24 +153,8 @@ public class ConciergeUI implements BaseUI
             while (!isCorrect)
             {
                 szSurname = InputHelper.inputString("Enter the customer's surname: ");
+                Date DOB = InputHelper.inputDate(LocalDate.now().minusYears(120), LocalDate.now(), "Enter the customer's DOB.");
 
-                boolean isDateInvalid = true;
-                Date DOB = null;
-                while(isDateInvalid)
-                {
-                    isDateInvalid = false;
-                    System.out.println("Enter the customer's DOB. DD/MM/YYYY");
-                    int day = InputHelper.inputInteger(1, 31, "Enter DD: ");
-                    int month = InputHelper.inputInteger(1, 12, "Enter MM: ");
-                    int year = InputHelper.inputInteger(1900, LocalDate.now().getYear(), "Enter YYYY: ");
-                    try {
-                        DOB = Date.valueOf(year + "-" + month + "-" + day);
-                    } catch (IllegalArgumentException e) {
-                        // catches dates like feb 30th which don't exist
-                        isDateInvalid = true;
-                        System.out.println("The date you entered is invalid.");
-                    }
-                }
                 if (DOB != null) // can't allow a search by just surname as that isn't secure
                 {
                     details = new CustomerSearchDetails(szSurname, DOB, null, null);
@@ -205,20 +217,59 @@ public class ConciergeUI implements BaseUI
         }
     }
 
-    public void createCustomer()
+    public boolean createCustomer()
     {
-        // ENSURE TO SET CURRENT CUSTOMER VARIABLE TO THE NEW CUSTOMER
+        System.out.println("\nEnter new customer details:");
+
+        String surname = InputHelper.inputString("Surname: ");
+        String firstName = InputHelper.inputString("First Name: ");
+        String title = InputHelper.inputString("Title (e.g. Mr, Ms): ");
+        Date dob = InputHelper.inputDate(LocalDate.now().minusYears(120), LocalDate.now(),"Enter DOB.");
+        String houseNumber = InputHelper.inputString("House Number or Name: ");
+        String streetName = InputHelper.inputString("Street Name: ");
+        String city = InputHelper.inputString("City: ");
+        String postcode = InputHelper.inputString("Postcode: ");
+
+        String phoneNumber = "0" + InputHelper.inputString("Phone Number: 0");
+        String email = InputHelper.inputString("Email Address: ");
+
+        // if email or phone isn't unique
+        if (access.customerMatchExists(new CustomerSearchDetails(null, null, email, null))
+        || access.customerMatchExists(new CustomerSearchDetails(null, null, null, phoneNumber)))
+        {
+            System.out.println("The email or phone number you entered is already in our system... Cancelling operation.");
+            return false;
+        }
+
+        // id is temporarily -1
+        setCurrentCustomer(new Customer(-1, surname, firstName, title, dob,
+                houseNumber, streetName, city, postcode,
+                phoneNumber, email, true));
+
+        // if customer not created currentCustomer = null
+        Customer insertResult = access.createCustomer(getCurrentCustomer());
+        if(insertResult != null)
+        {
+            setCurrentCustomer(insertResult);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    public boolean findRoomForCustomer()
+    public Map<Integer, Integer> findRoomForCustomer(Date startDate, int nights)
     {
-        InputHelper.inputString("INPUT ROOM DETAILS");
-        List<Room> availableRooms = access.getAvailableRooms(); // pass in details
+        Map<Integer, Integer> roomNumberAndOccupants = new HashMap<>();
+        int occupants = InputHelper.inputInteger(1, 3, "Enter how many occupants will stay in this room: ");
+        RoomDetails roomDetails = InputHelper.inputRoomDetails();
+        List<Room> availableRooms = access.getAvailableRooms(startDate, nights, occupants, roomDetails);
 
         if (availableRooms.isEmpty())
         {
             System.out.println("Sorry we don't have a room available that fits the requirements for that date");
-            return false;
+            return null;
         }
         else if (availableRooms.size() == 1)
         {
@@ -226,10 +277,11 @@ public class ConciergeUI implements BaseUI
                     + availableRooms.get(0)
                     + "\nIs this room okay? (Y/N): "))
             {
-                return false;
+                return null;
             }
-            // ADD ROOM NUMBER AND OCCUPANTS TO MAP
-            return true;
+
+            roomNumberAndOccupants.put(availableRooms.get(0).getIRoomNumber(), occupants);
+            return roomNumberAndOccupants;
         }
         else
         {
@@ -237,39 +289,37 @@ public class ConciergeUI implements BaseUI
                     + access.getCheapestRoom(availableRooms)
                     + "\nIs this room okay? (Y/N): "))
             {
-                // ADD ROOM NUMBER AND OCCUPANTS TO MAP
-                return true;
+                roomNumberAndOccupants.put(access.getCheapestRoom(availableRooms).getIRoomNumber(), occupants);
+                return roomNumberAndOccupants;
             }
-            else
+
+            availableRooms.remove(access.getCheapestRoom(availableRooms));
+
+            while(availableRooms.size() > 1)
             {
-                availableRooms.remove(access.getCheapestRoom(availableRooms));
-
-                while(availableRooms.size() > 1)
-                {
-                    if(InputHelper.inputYN("This is the next cheapest available room that fits the requirements on that date\n"
-                            + access.getCheapestRoom(availableRooms)
-                            + "\nIs this room okay? (Y/N): "))
-                    {
-                        // ADD ROOM NUMBER AND OCCUPANTS TO MAP
-                        return true;
-                    }
-                    else
-                    {
-                        availableRooms.remove(access.getCheapestRoom(availableRooms));
-                    }
-                }
-
-                if(InputHelper.inputYN("This is the last available room that fits the requirements on that date\n"
+                if(InputHelper.inputYN("This is the next cheapest available room that fits the requirements on that date\n"
                         + access.getCheapestRoom(availableRooms)
                         + "\nIs this room okay? (Y/N): "))
                 {
-                    // ADD ROOM NUMBER AND OCCUPANTS TO MAP
-                    return true;
+                    roomNumberAndOccupants.put(access.getCheapestRoom(availableRooms).getIRoomNumber(), occupants);
+                    return roomNumberAndOccupants;
                 }
                 else
                 {
-                    return false;
+                    availableRooms.remove(access.getCheapestRoom(availableRooms));
                 }
+            }
+
+            if(InputHelper.inputYN("This is the last available room that fits the requirements on that date\n"
+                    + access.getCheapestRoom(availableRooms)
+                    + "\nIs this room okay? (Y/N): "))
+            {
+                roomNumberAndOccupants.put(access.getCheapestRoom(availableRooms).getIRoomNumber(), occupants);
+                return roomNumberAndOccupants;
+            }
+            else
+            {
+                return null;
             }
         }
     }

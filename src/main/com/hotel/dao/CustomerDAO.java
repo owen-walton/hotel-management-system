@@ -9,6 +9,7 @@
 
 package main.com.hotel.dao;
 
+import com.mysql.cj.protocol.Resultset;
 import main.com.hotel.model.criteria.CustomerSearchDetails;
 import main.com.hotel.model.entity.Customer;
 import main.com.hotel.dbc.DBConnection;
@@ -234,21 +235,36 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
                     + ", Email"
                     + ", IsActive"
                     + " FROM Customer"
-                    + " WHERE LOWER(Surname) = LOWER('" + details.szSurname() + "')";
+                    + " WHERE";
 
+            boolean conditionAdded = false;
+            if (details.szSurname() != null)
+            {
+                sql = sql + " AND LOWER(Surname) = LOWER('" + details.szSurname() + "') ";
+                conditionAdded = true;
+            }
             if(details.DOB() != null)
             {
                 sql = sql + " AND DOB = '" + details.DOB() + "'";
+                conditionAdded = true;
             }
             if(details.szEmail() != null)
             {
                 sql = sql + " AND LOWER(Email) = LOWER('" + details.szEmail() + "')";
+                conditionAdded = true;
             }
             if(details.szPhoneNumber() != null)
             {
                 sql = sql + " AND PhoneNumber = '" + details.szPhoneNumber() + "'";
+                conditionAdded = true;
             }
 
+            if(!conditionAdded)
+            {
+                return null;
+            }
+
+            sql = sql.replaceAll("WHERE AND", "WHERE");
             sql = sql + ";";
 
             // execute query
@@ -295,11 +311,11 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
     // Implementation of WriteOnlyDAO
     // ----------------------------------------------------------------------
     @Override
-    public boolean insert(Customer customer)
+    public int insert(Customer customer)
     {
-        // bRC stores whether insert has worked
-        boolean bRC = false;
-        int iRC; // iRC is used to calculate bRC
+        // iRC stores whether insert has worked
+        int iRC;
+        int newCustomerId = -1;
         try
         {
             System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
@@ -332,12 +348,16 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
                     + " ) ; " ;
 
             sqlStatement = dbConnection.getConnection().createStatement() ;
-            iRC = sqlStatement.executeUpdate( sql ) ;
+            iRC = sqlStatement.executeUpdate( sql , Statement.RETURN_GENERATED_KEYS ) ;
 
             // iRC will hold how many records were updated or inserted.  zero is bad in this case.
             if ( iRC == 1 )
             {
-                bRC = true;
+                ResultSet rs = sqlStatement.getGeneratedKeys();
+                if(rs.next())
+                {
+                    newCustomerId = rs.getInt(1);
+                }
             }
         }
         catch( SQLException se )
@@ -351,7 +371,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
             e.printStackTrace() ;
         }
 
-        return bRC;
+        return newCustomerId;
     }
 
     @Override

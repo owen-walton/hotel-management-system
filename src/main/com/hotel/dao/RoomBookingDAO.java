@@ -250,11 +250,11 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
     // Implementation of WriteOnlyDAO
     // ----------------------------------------------------------------------
     @Override
-    public boolean insert(RoomBooking roomBooking)
+    public int insert(RoomBooking roomBooking)
     {
-        // bRC stores whether insert has worked
-        boolean bRC = false;
-        int iRC; // iRC is used to calculate bRC
+        // iRC stores whether insert has worked
+        int iRC;
+        int newId = -1;
         try
         {
             System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
@@ -273,12 +273,16 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
                     + " ) ; " ;
 
             sqlStatement = dbConnection.getConnection().createStatement() ;
-            iRC = sqlStatement.executeUpdate( sql ) ;
+            iRC = sqlStatement.executeUpdate( sql , Statement.RETURN_GENERATED_KEYS) ;
 
             // iRC will hold how many records were updated or inserted.  zero is bad in this case.
             if ( iRC == 1 )
             {
-                bRC = true;
+                ResultSet rs = sqlStatement.getGeneratedKeys();
+                if(rs.next())
+                {
+                    newId = rs.getInt(1);
+                }
             }
         }
         catch( SQLException se )
@@ -292,7 +296,7 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
             e.printStackTrace() ;
         }
 
-        return bRC;
+        return newId;
     }
 
     @Override

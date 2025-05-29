@@ -7,7 +7,7 @@ package main.com.hotel.dao;
 
 public interface WriteOnlyDAO<T>
 {
-    boolean insert(T t);
+    int insert(T t); // returns id created
     boolean update(T t); // updates record with the same primary key as 't' to have all non null 't' values
     boolean delete(int pk);
 }

@@ -1,19 +1,29 @@
 package main.com.hotel.role.access;
 
 import main.com.hotel.model.criteria.CustomerSearchDetails;
+import main.com.hotel.model.criteria.RoomDetails;
+import main.com.hotel.model.entity.BookingResult;
 import main.com.hotel.model.entity.Customer;
 import main.com.hotel.model.entity.Room;
+import main.com.hotel.service.BookingService;
 import main.com.hotel.service.CustomerService;
+import main.com.hotel.service.RoomService;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 public class ConciergeAccess
 {
     private final CustomerService customerService;
+    private final BookingService bookingService;
+    private final RoomService roomService;
 
     public ConciergeAccess()
     {
         this.customerService = new CustomerService();
+        this.bookingService = new BookingService();
+        this.roomService = new RoomService();
     }
 
     public boolean customerMatchExists(CustomerSearchDetails details)
@@ -32,19 +42,23 @@ public class ConciergeAccess
     }
 
     // take in room details
-    public List<Room> getAvailableRooms()
+    public List<Room> getAvailableRooms(Date startDate, int nights, int occupants, RoomDetails roomDetails)
     {
-        // pass in required details
         return null;
     }
 
     public Room getCheapestRoom(List<Room> rooms)
     {
-        return null;
+        return roomService.getCheapestRoom(rooms);
     }
 
-    public void addBooking()
+    public BookingResult addBooking(int customerId, Date startDate, int iNights, Map<Integer, Integer> selectedRooms)
     {
-        // handle both booking and room booking
+        return bookingService.addBooking(customerId, startDate, iNights, selectedRooms);
+    }
+
+    public Customer createCustomer(Customer customer)
+    {
+        return customerService.createCustomer(customer);
     }
 }

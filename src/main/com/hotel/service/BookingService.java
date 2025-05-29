@@ -3,12 +3,14 @@ package main.com.hotel.service;
 import main.com.hotel.dao.BookingDAO;
 import main.com.hotel.dao.RoomBookingDAO;
 import main.com.hotel.model.entity.Booking;
+import main.com.hotel.model.entity.BookingResult;
 import main.com.hotel.model.entity.RoomBooking;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class BookingService {
 
@@ -93,5 +95,27 @@ public class BookingService {
         }
 
         return endingRoomNumbers;
+    }
+
+    public BookingResult addBooking(int customerId, Date startDate, int iNights, Map<Integer, Integer> selectedRooms)
+    {
+        // future change, should only edit 1 table if both are correctly edited
+        Booking booking = new Booking(-1, customerId, startDate, iNights);
+        List<RoomBooking> roomBookings = new ArrayList<>(); // Map<RoomNumber, Occupants>
+
+        // add to Booking table
+        int bookingId = bookingDAO.insert(booking);
+        booking.setIBookingId(bookingId);
+
+        // add to RoomBooking table
+        for (Map.Entry<Integer, Integer> roomBookingMap : selectedRooms.entrySet())
+        {
+            RoomBooking roomBooking = new RoomBooking(-1, roomBookingMap.getKey(), bookingId, roomBookingMap.getValue().shortValue());
+            int roomBookingId = roomBookingDAO.insert(roomBooking);
+            roomBooking.setIRoomBookingID(roomBookingId);
+            roomBookings.add(roomBooking);
+        }
+
+        return new BookingResult(booking, roomBookings);
     }
 }

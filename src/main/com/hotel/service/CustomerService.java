@@ -52,4 +52,17 @@ public class CustomerService
         // assumes there is a search result (otherwise null error throws)
         return (findCustomer(details).getICustomerId() != -1);
     }
+
+    public Customer createCustomer(Customer customer)
+    {
+        int newId = customerDAO.insert(customer);
+        if(newId == -1)
+        {
+            return null;
+        }
+
+        customer.setICustomerId(newId);
+        return customer;
+    }
+
 }
