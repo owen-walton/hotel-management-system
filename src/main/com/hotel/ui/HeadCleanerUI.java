@@ -33,7 +33,7 @@ public class HeadCleanerUI implements BaseUI
         }
         System.out.println("The following rooms require cleaning today:");
         System.out.printf("%-12s | %-5s%n", "Room Number", "Floor");
-        System.out.println("-------------+-------");
+        System.out.println("---------------------");
 
         for (Map.Entry<Integer, Integer> room : todaysRooms.entrySet())
         {

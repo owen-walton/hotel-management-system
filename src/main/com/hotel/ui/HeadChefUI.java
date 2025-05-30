@@ -25,7 +25,7 @@ public class HeadChefUI implements BaseUI
         Object[][] numOfGuests = access.getNumOfGuestsForBreakfast(iDays);
 
         System.out.printf("%-15s | %-25s%n", "Date", "Guests that require breakfast");
-        System.out.println("----------------+----------------------------");
+        System.out.println("---------------------------------------------");
 
         for (int i = 0; i < numOfGuests[0].length; i++)
         {

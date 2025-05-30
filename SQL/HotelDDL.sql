@@ -63,6 +63,7 @@ CREATE TABLE Hotel.RoomBooking
         FOREIGN KEY ( BookingId ) REFERENCES Hotel.Booking( BookingId )
 ) ;
 
+-- Room data is the same throughout program so can be defined in DDl
 INSERT INTO Hotel.Room (
     RoomNumber, Occupancy, RoomType, HasShower, HasJacuzzi, HasSeaView,
     IsFamilyRoom, IsHoneymoonRoom, Floor, PoundsPerNight
