@@ -140,4 +140,38 @@ public class BookingService {
         }
         return overlappingRoomBookings;
     }
+
+    public List<BookingResult> getFutureBookingsByCustomerId(int customerId)
+    {
+        // only return bookings that are in future (not old or current as these cannot be edited)
+        // allow bookings starting today
+        List<Booking> customersBookings = bookingDAO.getByCustomerId(customerId);
+        List<BookingResult> customersFutureBookingResults = new ArrayList<>();
+
+        for (Booking customersBooking : customersBookings) {
+            if (!customersBooking.getStartDate().toLocalDate().isBefore(LocalDate.now())) {
+                customersFutureBookingResults.add(new BookingResult(customersBooking, roomBookingDAO.getByBookingId(customersBooking.getIBookingId())));
+            }
+        }
+        return customersFutureBookingResults;
+    }
+
+    public boolean deleteBooking(BookingResult bookingResult)
+    {
+        boolean deleted = true;
+        for(RoomBooking roomBooking : bookingResult.roomBookings())
+        {
+            if(!roomBookingDAO.delete(roomBooking.getIRoomBookingID()))
+            {
+                deleted = false;
+                break;
+            }
+        }
+        if(deleted)
+        {
+            deleted = bookingDAO.delete(bookingResult.booking().getIBookingId());
+        }
+
+        return deleted;
+    }
 }

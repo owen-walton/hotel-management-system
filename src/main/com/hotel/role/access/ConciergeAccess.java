@@ -2,10 +2,7 @@ package main.com.hotel.role.access;
 
 import main.com.hotel.model.criteria.CustomerSearchDetails;
 import main.com.hotel.model.criteria.RoomDetails;
-import main.com.hotel.model.entity.BookingResult;
-import main.com.hotel.model.entity.Customer;
-import main.com.hotel.model.entity.Room;
-import main.com.hotel.model.entity.RoomBooking;
+import main.com.hotel.model.entity.*;
 import main.com.hotel.service.BookingService;
 import main.com.hotel.service.CustomerService;
 import main.com.hotel.service.RoomService;
@@ -86,5 +83,15 @@ public class ConciergeAccess
     public Customer createCustomer(Customer customer)
     {
         return customerService.createCustomer(customer);
+    }
+
+    public List<BookingResult> getFutureBookingsByCustomerId(int customerId)
+    {
+        return bookingService.getFutureBookingsByCustomerId(customerId);
+    }
+
+    public boolean deleteBooking(BookingResult bookingResult)
+    {
+        return bookingService.deleteBooking(bookingResult);
     }
 }

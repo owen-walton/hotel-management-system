@@ -147,6 +147,54 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
         return bookingList;
     }
 
+    public List<Booking> getByCustomerId(int customerId)
+    {
+        List<Booking> bookings = new ArrayList<>();
+
+        try {
+            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+
+            // create query
+            sql = "SELECT BookingId"
+                    + ", CustomerId"
+                    + ", StartDate"
+                    + ", Nights"
+                    + " FROM Booking"
+                    + " WHERE CustomerId = " + customerId
+                    + ";";
+
+            // execute query
+            sqlStatement = dbConnection.getConnection().createStatement();
+            resultSet = sqlStatement.executeQuery(sql);
+
+            // store result of query in bookings variable
+            while(resultSet.next())
+            {
+                bookings.add(new Booking(
+                        resultSet.getInt("BookingId"),
+                        resultSet.getInt("CustomerId"),
+                        resultSet.getDate("StartDate"),
+                        resultSet.getInt("Nights")));
+            }
+
+            return bookings;
+        }
+        catch( SQLException se )
+        {
+            System.err.println( this.getClass().getName() + ": SQL error: " + se ) ;
+            se.printStackTrace();
+
+            return null;
+        }
+        catch ( Exception e )
+        {
+            System.err.println( this.getClass().getName() + ": Error: " + e ) ;
+            e.printStackTrace() ;
+
+            return null;
+        }
+    }
+
     // ----------------------------------------------------------------------
     // Implementation of WriteOnlyDAO
     // ----------------------------------------------------------------------

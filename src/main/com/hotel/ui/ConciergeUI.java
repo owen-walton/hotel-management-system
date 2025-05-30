@@ -83,13 +83,9 @@ public class ConciergeUI implements BaseUI
 
         System.out.println("\nMake Booking:");
 
-        // find customer if not create new customer and add to db
-        if(!findCurrentCustomer())
+        if (!signInCustomer())
         {
-            if (!createCustomer())
-            {
-                return false;
-            }
+            return false;
         }
 
         // input booking data
@@ -125,7 +121,71 @@ public class ConciergeUI implements BaseUI
 
     public void handleBooking()
     {
+        String input = InputHelper.inputLetterMultipleChoice(2, """
+                What do you need access to bookings for?
+                A) Customer request
+                B) Admin
+                Enter a letter:\s""");
 
+        switch (input)
+        {
+            case "A" -> {
+                if (!findCurrentCustomer())
+                {
+                    System.out.println("Customer account cannot be found so there are no bookings they can handle.");
+                    return;
+                }
+
+                List<BookingResult> customerBookings = access.getFutureBookingsByCustomerId(getCurrentCustomer().getICustomerId());
+                if(customerBookings.isEmpty())
+                {
+                    System.out.println("Customer has no bookings to handle.");
+                }
+                else
+                {
+                    String input2 = InputHelper.inputLetterMultipleChoice(3, """
+                            What would they like to do:
+                            A) Retrieve booking details
+                            B) Edit booking details
+                            C) Cancel booking""");
+
+                    switch (input2)
+                    {
+                        case "A" -> {
+                            System.out.println("Here are the booking details:\n" + selectBooking(customerBookings));
+                            return;
+                        }
+                        case "B" -> {
+                            // EDIT BOOKING DETAILS
+                        }
+                        case "C" -> {
+                            // CURRENTLY ALLOWS CANCELLING OF ANY BOOKING FROM TODAY ONWARDS, POTENTIAL 3 DAY NO CANCELLATION IN FUTURE
+                            BookingResult booking = selectBooking(customerBookings);
+                            if (InputHelper.inputYN("Are you sure you want to delete the booking with details:\n" +
+                                    booking + "\n(Enter Y/N): "))
+                            {
+                                // CONCIERGE SHOULD HANDLE REFUND AT THIS POINT
+                                boolean deleted = access.deleteBooking(booking);
+                                if (deleted)
+                                {
+                                    System.out.println("Booking successfully cancelled");
+                                    return;
+                                }
+                                else
+                                {
+                                    System.out.println("Booking failed to be deleted.");
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            case "B" -> {
+
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + input);
+        }
     }
 
     public void handleCustomerDetails()
@@ -147,7 +207,7 @@ public class ConciergeUI implements BaseUI
     {
         boolean isCorrect = false;
         CustomerSearchDetails details = null;
-        String szSurname = null;
+        String szSurname;
         if (InputHelper.inputYN("Do you know the customers DOB? (Y/N): "))
         {
             while (!isCorrect)
@@ -322,5 +382,57 @@ public class ConciergeUI implements BaseUI
                 return null;
             }
         }
+    }
+
+    public boolean signInCustomer()
+    {
+        if(InputHelper.inputYN("Are they an existing customer? (Y/N): "))
+        {
+            // find customer if not create new customer and add to db
+            if(!findCurrentCustomer())
+            {
+                return createCustomer();
+            }
+        }
+        else
+        {
+            return createCustomer();
+        }
+
+        return true;
+    }
+
+    public BookingResult selectBooking(List<BookingResult> customerBookings)
+    {
+        BookingResult bookingResult;
+
+        if (customerBookings.size() == 1)
+        {
+            bookingResult = customerBookings.get(0);
+            System.out.println("Found 1 booking.");
+        }
+        else
+        {
+            StringBuilder promptBuilder = new StringBuilder("Which booking do you want access to? Select it by start date:\n");
+
+            for (int i = 0; i < customerBookings.size(); i++) {
+                char optionLetter = (char) ('A' + i);
+                String dateString = customerBookings.get(i).booking().getStartDate().toString(); // format if needed
+                promptBuilder.append(optionLetter)
+                        .append(") ")
+                        .append(dateString)
+                        .append("\n");
+            }
+
+            promptBuilder.append("Enter a letter: ");
+            String input3 = InputHelper.inputLetterMultipleChoice(customerBookings.size(), promptBuilder.toString());
+
+            int index = input3.charAt(0) - 'A';
+
+            bookingResult = customerBookings.get(index);
+
+            System.out.println("Booking selected.");
+        }
+        return bookingResult;
     }
 }
