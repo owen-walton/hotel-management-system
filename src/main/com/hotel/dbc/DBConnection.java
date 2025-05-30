@@ -49,7 +49,6 @@ public class DBConnection
     {
         try
         {
-            System.err.println( this.getClass().getName() + "DBC: Connecting to database");
             // Load the driver class explicitly
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection( DB_URL , USER , PASS ) ;
@@ -57,7 +56,6 @@ public class DBConnection
             {
                 this.bConnected = true ;
             }
-            System.err.println( this.getClass().getName() + "DBC: Successful connection to DB." ) ;
         }
         catch ( SQLException se )
         {
@@ -77,7 +75,6 @@ public class DBConnection
         {
             this.conn.close() ;
             this.bConnected = false ;
-            System.err.println( this.getClass().getName() + "DB: Disconnected." ) ;
         }
         catch ( SQLException se )
         {
