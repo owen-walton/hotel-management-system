@@ -9,6 +9,7 @@ import main.com.hotel.role.access.ConciergeAccess;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,8 +79,8 @@ public class ConciergeUI implements BaseUI
 
     public boolean makeBooking()
     {
-        int numOfRooms;
-        Map<Integer, Integer> selectedRooms = new HashMap<>();
+        int numOfRooms, totalCost = 0;
+        Map<Integer, Integer> selectedRooms = new HashMap<>(); // room number and occupants
 
         System.out.println("\nMake Booking:");
 
@@ -92,13 +93,15 @@ public class ConciergeUI implements BaseUI
         int iNights = InputHelper.inputInteger(1, 15, "Enter number of nights they would like to book for: ");
         Date startDate = InputHelper.inputDate(LocalDate.now(), LocalDate.now().plusYears(1), "Enter the date they would like to booking to start.");
 
-        numOfRooms = InputHelper.inputInteger(1, 20, "How many rooms do you want to book?");
+        numOfRooms = InputHelper.inputInteger(1, 20, "How many rooms do you want to book? ");
+
+        List<Integer> excludedRoomNumbers = new ArrayList<>(); // rooms that can't be offered
 
         // for every room required, run findRoomForCustomer
         for (int i = 0; i < numOfRooms; i++)
         {
-            Map<Integer,Integer> temp = findRoomForCustomer(startDate, iNights);
-            if(temp == null)
+            Map<Integer,Integer> temp = findRoomForCustomer(startDate, iNights, excludedRoomNumbers);
+            if(temp == null || temp.isEmpty())
             {
                 System.out.println("Booking cancelled.");
                 return false;
@@ -106,16 +109,23 @@ public class ConciergeUI implements BaseUI
             else
             {
                 selectedRooms.putAll(temp);
+
+                // map is only length 1
+                Map.Entry<Integer, Integer> entry = temp.entrySet().iterator().next();
+                excludedRoomNumbers.add(entry.getKey()); // add room that was just selected to excluded rooms
+                totalCost += access.getRoomCost(entry.getKey());
             }
         }
 
+        totalCost = totalCost * iNights;
         // THIS IS WHERE PAYMENT IS HANDLED
 
         // add Booking details to booking table and add selectedRooms map to RoomBooking table
         BookingResult result = access.addBooking(getCurrentCustomer().getICustomerId(), startDate, iNights, selectedRooms);
 
         // confirm booking
-        System.out.println("Booking confirmed. Here are the details:\n" + result);
+        System.out.println("Booking confirmed. Here are the details:\nTotal cost: £" + totalCost +
+                "\n" + result);
         return true;
     }
 
@@ -319,12 +329,12 @@ public class ConciergeUI implements BaseUI
         }
     }
 
-    public Map<Integer, Integer> findRoomForCustomer(Date startDate, int nights)
+    public Map<Integer, Integer> findRoomForCustomer(Date startDate, int nights, List<Integer> excludedRoomNumbers)
     {
         Map<Integer, Integer> roomNumberAndOccupants = new HashMap<>();
         int occupants = InputHelper.inputInteger(1, 3, "Enter how many occupants will stay in this room: ");
         RoomDetails roomDetails = InputHelper.inputRoomDetails();
-        List<Room> availableRooms = access.getAvailableRooms(startDate, nights, occupants, roomDetails);
+        List<Room> availableRooms = access.getAvailableRooms(startDate, nights, occupants, roomDetails, excludedRoomNumbers);
 
         if (availableRooms.isEmpty())
         {

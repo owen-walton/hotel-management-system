@@ -40,9 +40,9 @@ public class ConciergeAccess
         return customerService.findCustomer(details);
     }
 
-    public List<Room> getAvailableRooms(Date startDate, int nights, int occupants, RoomDetails roomDetails)
+    public List<Room> getAvailableRooms(Date startDate, int nights, int occupants, RoomDetails roomDetails, List<Integer> excludedRoomNumbers)
     {
-        List<Room> matchingRooms = roomService.getMatchingRooms(occupants, roomDetails);
+        List<Room> matchingRooms = roomService.getMatchingRooms(occupants, roomDetails, excludedRoomNumbers);
         List<RoomBooking> busyRooms = bookingService.getOverlappingRoomBookings(startDate, nights);
         List<Room> availableRooms = new ArrayList<>();
 
@@ -93,5 +93,10 @@ public class ConciergeAccess
     public boolean deleteBooking(BookingResult bookingResult)
     {
         return bookingService.deleteBooking(bookingResult);
+    }
+
+    public int getRoomCost(int roomNumber)
+    {
+        return roomService.getRoomCost(roomNumber);
     }
 }

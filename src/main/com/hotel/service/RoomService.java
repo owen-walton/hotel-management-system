@@ -40,8 +40,23 @@ public class RoomService
         return cheapest;
     }
 
-    public List<Room> getMatchingRooms(int occupants, RoomDetails details)
+    public List<Room> getMatchingRooms(int occupants, RoomDetails details, List<Integer> excludedRoomNumbers)
     {
-        return roomDAO.getMatchingRooms(occupants, details);
+        List<Room> rooms = roomDAO.getMatchingRooms(occupants, details);
+
+        if (rooms != null)
+        {
+            for (int num : excludedRoomNumbers)
+            {
+                rooms.removeIf(room -> room.getIRoomNumber() == num);
+            }
+        }
+
+        return rooms;
+    }
+
+    public int getRoomCost(int roomNumber)
+    {
+        return roomDAO.getByPK(roomNumber).getIPoundsPerNight();
     }
 }
