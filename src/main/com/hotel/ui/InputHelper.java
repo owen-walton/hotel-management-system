@@ -97,36 +97,6 @@ final class InputHelper {
         }
     }
 
-    public static String inputStringNullable(String prompt)
-    {
-        Scanner sc = new Scanner(System.in);
-        String input;
-
-        while (true)
-        {
-            System.out.print(prompt);
-
-            input = sc.nextLine();
-
-            // check that there is no semicolon for sql injection precaution
-            if (input != null && !input.contains(";"))
-            {
-                if(input.trim().isEmpty())
-                {
-                    return null;
-                }
-                else
-                {
-                    return input; // Return the valid input
-                }
-            }
-            else
-            {
-                System.out.println("Please enter a valid string.");
-            }
-        }
-    }
-
     public static boolean inputYN(String prompt) {
         Scanner sc = new Scanner(System.in);
         String input;
@@ -217,7 +187,28 @@ final class InputHelper {
 
     public static RoomDetails inputRoomDetails()
     {
-        String roomType = InputHelper.inputStringNullable("Enter the room type (e.g., Single, Double, Suite) or press Enter for any: ");
+        String roomType = switch (InputHelper.inputLetterMultipleChoice(6, """
+                Enter the room type they would like:
+                A) Any
+                B) Single
+                C) Double
+                D) Single/Double
+                E) Double/Twin
+                F) Twin
+                G) Triple
+                H) Queen
+                Enter a letter: \s"""))
+        {
+            case "A" -> null;
+            case "B" -> "Single";
+            case "C" -> "Double";
+            case "D" -> "Single/Double";
+            case "E" -> "Double/Twin";
+            case "F" -> "Twin";
+            case "G" -> "Triple";
+            case "H" -> "Queen";
+            default -> throw new IllegalStateException("Unexpected value");
+        };
         Boolean hasShower = InputHelper.inputYNNullable("Does the room have a shower? (Y/N or press Enter for any): ");
         Boolean hasJacuzzi = InputHelper.inputYNNullable("Does the room have a jacuzzi? (Y/N or press Enter for any): ");
         Boolean hasSeaView = InputHelper.inputYNNullable("Does the room have a sea view? (Y/N or press Enter for any): ");
