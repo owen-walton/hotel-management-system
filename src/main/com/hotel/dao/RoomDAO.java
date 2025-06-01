@@ -59,7 +59,7 @@ public class RoomDAO implements ReadOnlyDAO<Room>{
         Room room;
 
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT RoomNumber"
@@ -116,7 +116,7 @@ public class RoomDAO implements ReadOnlyDAO<Room>{
     public int getNumRows()
     {
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT COUNT(*) AS total FROM Room;";
@@ -151,7 +151,7 @@ public class RoomDAO implements ReadOnlyDAO<Room>{
         List<Room> roomList = new ArrayList<>();
 
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT RoomNumber"
@@ -210,7 +210,7 @@ public class RoomDAO implements ReadOnlyDAO<Room>{
         List<Room> roomList = new ArrayList<>();
 
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT RoomNumber"

@@ -59,7 +59,7 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
         RoomBooking roomBooking;
 
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT RoomBookingId"
@@ -107,7 +107,7 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
         List<RoomBooking> roomBookings = new ArrayList<>();
 
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT RoomBookingId"
@@ -157,7 +157,7 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
     public int getNumRows()
     {
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT COUNT(*) AS total FROM RoomBooking;";
@@ -192,7 +192,7 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
         List<RoomBooking> roomBookingList = new ArrayList<>();
 
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT RoomBookingId"
@@ -241,7 +241,7 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
         int occupants;
 
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT SUM(Occupants) AS total_occupants "

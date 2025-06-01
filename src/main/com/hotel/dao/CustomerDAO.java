@@ -61,7 +61,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         Customer customer;
 
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT CustomerId"
@@ -122,7 +122,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
     public int getNumRows()
     {
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT COUNT(*) AS total FROM Customer;";
@@ -157,7 +157,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         List<Customer> customerList = new ArrayList<>();
 
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT CustomerId"
@@ -219,7 +219,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         List<Customer> customerList = new ArrayList<>();
 
         try {
-            System.err.println(this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected());
+            
 
             // create query
             sql = "SELECT CustomerId"
