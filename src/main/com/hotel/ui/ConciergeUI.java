@@ -57,15 +57,14 @@ public class ConciergeUI implements BaseUI
 
         while(getSessionActive())
         {
-            input = InputHelper.inputLetterMultipleChoice(7, """
+            input = InputHelper.inputLetterMultipleChoice(6, """
                     What would you like to do?
                     A) Make a booking
                     B) Edit/cancel/find a booking
                     C) Edit/delete customer details
                     D) Retrieve customer details
-                    E) Delete customer details
-                    F) Access customer detail logs
-                    G) Close program
+                    E) Access customer detail logs
+                    F) Close program
                     Enter a letter:\s""");
 
             switch (input) {
@@ -73,9 +72,8 @@ public class ConciergeUI implements BaseUI
                 case "B" -> handleBooking();
                 case "C" -> handleCustomerDetails();
                 case "D" -> retrieveCustomerDetails();
-                case "E" -> deleteCustomerDetails();
-                case "F" -> pullCustomerDetailLogs();
-                case "G" -> setSessionActive(false);
+                case "E" -> pullCustomerDetailLogs();
+                case "F" -> setSessionActive(false);
                 default -> throw new IllegalStateException("Unexpected value: " + input);
             }
 
@@ -209,11 +207,6 @@ public class ConciergeUI implements BaseUI
     }
 
     public void retrieveCustomerDetails()
-    {
-
-    }
-
-    public void deleteCustomerDetails()
     {
 
     }
