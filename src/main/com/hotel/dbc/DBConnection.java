@@ -14,9 +14,9 @@ public class DBConnection
     // Class variables
     // ----------------------------------------------------------------------
     // JDBC driver name and database URL
-    // There is a bug/feature with Java11 and MySQL.
+    // There is a bug/feature with Java and MySQL.
     // https://bugs.mysql.com/bug.php?id=93590 for explanation into bug
-    // "useSSL=false" is a workaround for the bug, works for Java11 & MySQL5
+    // "useSSL=false" is a workaround for the bug
     final String DB_URL = "jdbc:mysql://localhost:3306/Hotel?useSSL=false";
     final String USER = "root"; // database username
 
