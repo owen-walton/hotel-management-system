@@ -1,3 +1,6 @@
+/**
+ * @author Owen Walton
+ */
 package main.com.hotel.model.criteria;
 
 public record RoomDetails(

@@ -1,3 +1,6 @@
+/**
+ * @author Owen Walton
+ */
 package main.com.hotel.model.entity;
 
 import main.com.hotel.dao.CustomerDAO;

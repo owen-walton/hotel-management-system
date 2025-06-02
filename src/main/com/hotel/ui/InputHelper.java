@@ -1,4 +1,5 @@
 /**
+ * @author Owen Walton
  * Methods in this class are static and callable to simplify input into one function
  * Class does not close scanners do to multiple functions utilising it and not wanting to close System.in
  */

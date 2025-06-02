@@ -3,7 +3,6 @@
  * Accessed by RoomBookingDAO
  * Used when interacting with RoomBooking table in DB
  * @author Owen Walton
- * Last edit: 21/05/25
  */
 
 package main.com.hotel.model.entity;

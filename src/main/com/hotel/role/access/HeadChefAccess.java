@@ -1,3 +1,7 @@
+/**
+ * @author Owen Walton
+ * Smart wrapper for service files so head chef doesn't have direct access to service logic
+ */
 package main.com.hotel.role.access;
 
 import main.com.hotel.service.BookingService;

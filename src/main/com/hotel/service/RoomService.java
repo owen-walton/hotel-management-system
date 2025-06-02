@@ -1,3 +1,7 @@
+/**
+ * @author Owen Walton
+ * Handles all business logic related to rooms
+ */
 package main.com.hotel.service;
 
 import main.com.hotel.dao.RoomDAO;

@@ -1,3 +1,6 @@
+/**
+ * @author Owen Walton
+ */
 package main.com.hotel.ui;
 
 import main.com.hotel.model.criteria.CustomerSearchDetails;

@@ -2,8 +2,6 @@
  *
  * This is a wrapper file used to handle interaction with Customer table in the database
  * @author Owen Walton
- * Current issue - Delete customer details function not active currently
- *                 whilst company decides what circumstance data is allowed to be deleted
  *
  **/
 
@@ -219,7 +217,7 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         List<Customer> customerList = new ArrayList<>();
 
         try {
-            
+
 
             // create query
             sql = "SELECT CustomerId"

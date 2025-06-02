@@ -2,7 +2,6 @@
  * @author Owen Walton
  * Login must be edited to include authentication
  * Allows login and calls .run() from the corresponding ui class
- * as rest of program is coded, more functionality may become required after ui.run();
  */
 
 package main.com.hotel.ui;
