@@ -295,8 +295,6 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
         int newId = -1;
         try
         {
-            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
-
             sql = "INSERT INTO RoomBooking( "
                     + "RoomNumber"
                     + ", BookingId"
@@ -343,8 +341,6 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
         int iRC; // iRC is used to calculate bRC
         try
         {
-            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
-
             sql = "UPDATE RoomBooking SET ";
 
             int count = 0; // can break out of function if all of room booking's fields are null (nothing to update)
@@ -409,8 +405,6 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
         int iRC; // iRC is used to calculate bRC
         try
         {
-            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
-
             sql = "DELETE FROM RoomBooking WHERE RoomBookingId = " + pk + ";";
 
             sqlStatement = dbConnection.getConnection().createStatement() ;
@@ -443,8 +437,6 @@ public class RoomBookingDAO implements ReadOnlyDAO<RoomBooking>, WriteOnlyDAO<Ro
         int iRC; // iRC is used to calculate bRC
         try
         {
-            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
-
             sql = "DELETE FROM RoomBooking WHERE BookingId = " + bookingId + ";";
 
             sqlStatement = dbConnection.getConnection().createStatement() ;

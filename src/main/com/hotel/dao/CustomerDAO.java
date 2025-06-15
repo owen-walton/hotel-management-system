@@ -316,8 +316,6 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         int newCustomerId = -1;
         try
         {
-            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
-
             sql = "INSERT INTO Customer( "
                     + " Surname"
                     + ", FirstName"
@@ -380,8 +378,6 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         int iRC; // iRC is used to calculate bRC
         try
         {
-            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
-
             sql = "UPDATE Customer SET ";
 
             // add all updates that aren't null
@@ -462,8 +458,6 @@ public class CustomerDAO implements ReadOnlyDAO<Customer>, WriteOnlyDAO<Customer
         int iRC; // iRC is used to calculate bRC
         try
         {
-            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
-
             sql = "DELETE FROM Customer WHERE CustomerId = " + pk + ";";
 
             sqlStatement = dbConnection.getConnection().createStatement() ;

@@ -242,8 +242,6 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
 
         try
         {
-            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
-
             sql = "INSERT INTO Booking( "
                 + "CustomerId"
                 + ", StartDate"
@@ -289,8 +287,6 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
         int iRC; // iRC is used to calculate bRC
         try
         {
-            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
-
             sql = "UPDATE Booking SET ";
 
             int count = 0; // can break out of function if all of booking's fields are null (nothing to update)
@@ -352,8 +348,6 @@ public class BookingDAO implements ReadOnlyDAO<Booking>, WriteOnlyDAO<Booking>{
         int iRC; // iRC is used to calculate bRC
         try
         {
-            System.err.println( this.getClass().getName() + ": is DB connected? = " + dbConnection.isConnected() ) ;
-
             sql = "DELETE FROM Booking WHERE BookingId = " + pk + ";";
 
             sqlStatement = dbConnection.getConnection().createStatement() ;
