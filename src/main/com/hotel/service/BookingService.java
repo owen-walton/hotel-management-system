@@ -152,12 +152,31 @@ public class BookingService {
         List<Booking> customersBookings = bookingDAO.getByCustomerId(customerId);
         List<BookingResult> customersFutureBookingResults = new ArrayList<>();
 
-        for (Booking customersBooking : customersBookings) {
-            if (!customersBooking.getStartDate().toLocalDate().isBefore(LocalDate.now())) {
+        for (Booking customersBooking : customersBookings)
+        {
+            if (!customersBooking.getStartDate().toLocalDate().isBefore(LocalDate.now()))
+            {
                 customersFutureBookingResults.add(new BookingResult(customersBooking, roomBookingDAO.getByBookingId(customersBooking.getIBookingId())));
             }
         }
         return customersFutureBookingResults;
+    }
+
+    public List<BookingResult> getBookingsByCustomerId(int customerId)
+    {
+        // only return bookings that are in future (not old or current as these cannot be edited)
+        // allow bookings starting today
+        List<Booking> customersBookings = bookingDAO.getByCustomerId(customerId);
+        List<BookingResult> customersBookingResults = new ArrayList<>();
+
+        for (Booking customersBooking : customersBookings)
+        {
+
+            customersBookingResults.add(new BookingResult(customersBooking, roomBookingDAO.getByBookingId(customersBooking.getIBookingId())));
+
+        }
+
+        return customersBookingResults;
     }
 
     public boolean deleteBooking(BookingResult bookingResult)

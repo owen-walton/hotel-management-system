@@ -69,4 +69,13 @@ public class CustomerService
         return customer;
     }
 
+    public boolean deleteCustomer(Customer customer)
+    {
+        return customerDAO.delete(customer.getICustomerId());
+    }
+
+    public boolean updateCustomer(Customer customer)
+    {
+        return customerDAO.update(customer);
+    }
 }

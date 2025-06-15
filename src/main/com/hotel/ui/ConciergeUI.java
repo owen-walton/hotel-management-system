@@ -57,14 +57,13 @@ public class ConciergeUI implements BaseUI
 
         while(getSessionActive())
         {
-            input = InputHelper.inputLetterMultipleChoice(6, """
+            input = InputHelper.inputLetterMultipleChoice(5, """
                     What would you like to do?
                     A) Make a booking
-                    B) Edit/cancel/find a booking
+                    B) Cancel/find a booking
                     C) Edit/delete customer details
                     D) Retrieve customer details
-                    E) Access customer detail logs
-                    F) Close program
+                    E) Close program
                     Enter a letter:\s""");
 
             switch (input) {
@@ -72,8 +71,7 @@ public class ConciergeUI implements BaseUI
                 case "B" -> handleBooking();
                 case "C" -> handleCustomerDetails();
                 case "D" -> retrieveCustomerDetails();
-                case "E" -> pullCustomerDetailLogs();
-                case "F" -> setSessionActive(false);
+                case "E" -> setSessionActive(false);
                 default -> throw new IllegalStateException("Unexpected value: " + input);
             }
 
@@ -134,76 +132,138 @@ public class ConciergeUI implements BaseUI
 
     public void handleBooking()
     {
-        String input = InputHelper.inputLetterMultipleChoice(2, """
-                What do you need access to bookings for?
-                A) Customer request
-                B) Admin
-                Enter a letter:\s""");
-
-        switch (input)
+        if (!findCurrentCustomer())
         {
-            case "A" -> {
-                if (!findCurrentCustomer())
-                {
-                    System.out.println("Customer account cannot be found so there are no bookings they can handle.");
+            System.out.println("Customer account cannot be found so there are no bookings they can handle.");
+            return;
+        }
+
+        List<BookingResult> customerBookings = access.getFutureBookingsByCustomerId(getCurrentCustomer().getICustomerId());
+        if(customerBookings.isEmpty())
+        {
+            System.out.println("Customer has no bookings to handle.");
+        }
+        else
+        {
+            String input2 = InputHelper.inputLetterMultipleChoice(2, """
+                    What would they like to do:
+                    A) Retrieve booking details
+                    B) Cancel booking""");
+
+            switch (input2)
+            {
+                case "A" -> {
+                    System.out.println("Here are the booking details:\n" + selectBooking(customerBookings));
                     return;
                 }
-
-                List<BookingResult> customerBookings = access.getFutureBookingsByCustomerId(getCurrentCustomer().getICustomerId());
-                if(customerBookings.isEmpty())
-                {
-                    System.out.println("Customer has no bookings to handle.");
-                }
-                else
-                {
-                    String input2 = InputHelper.inputLetterMultipleChoice(3, """
-                            What would they like to do:
-                            A) Retrieve booking details
-                            B) Edit booking details
-                            C) Cancel booking""");
-
-                    switch (input2)
+                case "B" -> {
+                    // CURRENTLY ALLOWS CANCELLING OF ANY BOOKING FROM TODAY ONWARDS, POTENTIAL 3 DAY NO CANCELLATION IN FUTURE
+                    BookingResult booking = selectBooking(customerBookings);
+                    if (InputHelper.inputYN("Are you sure you want to delete the booking with details:\n" +
+                            booking + "\n(Enter Y/N): "))
                     {
-                        case "A" -> {
-                            System.out.println("Here are the booking details:\n" + selectBooking(customerBookings));
+                        // CONCIERGE SHOULD HANDLE REFUND AT THIS POINT
+                        boolean deleted = access.deleteBooking(booking);
+                        if (deleted)
+                        {
+                            System.out.println("Booking successfully cancelled");
                             return;
                         }
-                        case "B" -> {
-                            // EDIT BOOKING DETAILS
-                        }
-                        case "C" -> {
-                            // CURRENTLY ALLOWS CANCELLING OF ANY BOOKING FROM TODAY ONWARDS, POTENTIAL 3 DAY NO CANCELLATION IN FUTURE
-                            BookingResult booking = selectBooking(customerBookings);
-                            if (InputHelper.inputYN("Are you sure you want to delete the booking with details:\n" +
-                                    booking + "\n(Enter Y/N): "))
-                            {
-                                // CONCIERGE SHOULD HANDLE REFUND AT THIS POINT
-                                boolean deleted = access.deleteBooking(booking);
-                                if (deleted)
-                                {
-                                    System.out.println("Booking successfully cancelled");
-                                    return;
-                                }
-                                else
-                                {
-                                    System.out.println("Booking failed to be deleted.");
-                                    return;
-                                }
-                            }
+                        else
+                        {
+                            System.out.println("Booking failed to be deleted.");
+                            return;
                         }
                     }
                 }
             }
-            case "B" -> {
-
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + input);
         }
+
     }
 
     public void handleCustomerDetails()
     {
+        System.out.println("\nEdit/Delete Customer Details:");
 
+        if (!findCurrentCustomer())
+        {
+            System.out.println("Customer account could not be found.");
+            return;
+        }
+
+        String input = InputHelper.inputLetterMultipleChoice(2, """
+            What would you like to do?
+            A) Edit customer details
+            B) Delete customer account
+            Enter a letter:\s""");
+
+        switch (input)
+        {
+            case "A" -> {
+                Customer current = getCurrentCustomer();
+
+                System.out.println("Current details:\n" + current);
+                if (!InputHelper.inputYN("Would you like to edit these details? (Y/N): "))
+                {
+                    return;
+                }
+
+                System.out.println("Please type the updated details or press enter for no change.");
+                String surname = InputHelper.inputStringOrNothing("Surname [" + current.getSzSurname() + "]: ");
+                String firstName = InputHelper.inputStringOrNothing("First Name [" + current.getSzFirstName() + "]: ");
+                String title = InputHelper.inputStringOrNothing("Title [" + current.getSzTitle() + "]: ");
+                String houseNumber = InputHelper.inputStringOrNothing("House Number or Name [" + current.getSzHouseNumber() + "]: ");
+                String streetName = InputHelper.inputStringOrNothing("Street Name [" + current.getSzStreetName() + "]: ");
+                String city = InputHelper.inputStringOrNothing("City [" + current.getSzCity() + "]: ");
+                String postcode = InputHelper.inputStringOrNothing("Postcode [" + current.getSzPostcode() + "]: ");
+                String phoneNumber = InputHelper.inputStringOrNothing("Phone Number [" + current.getSzPhoneNumber() + "]: ");
+                String email = InputHelper.inputStringOrNothing("Email Address [" + current.getSzEmail() + "]: ");
+
+                // use old values where nothing entered
+                Customer updatedCustomer = new Customer(
+                        current.getICustomerId(),
+                        surname.isEmpty() ? current.getSzSurname() : surname,
+                        firstName.isEmpty() ? current.getSzFirstName() : firstName,
+                        title.isEmpty() ? current.getSzTitle() : title,
+                        current.getDOB(), // doesn't change
+                        houseNumber.isEmpty() ? current.getSzHouseNumber() : houseNumber,
+                        streetName.isEmpty() ? current.getSzStreetName() : streetName,
+                        city.isEmpty() ? current.getSzCity() : city,
+                        postcode.isEmpty() ? current.getSzPostcode() : postcode,
+                        phoneNumber.isEmpty() ? current.getSzPhoneNumber() : phoneNumber,
+                        email.isEmpty() ? current.getSzEmail() : email,
+                        true
+                );
+
+                if (access.updateCustomer(updatedCustomer))
+                {
+                    setCurrentCustomer(updatedCustomer);
+                    System.out.println("Customer details updated successfully.");
+                }
+                else
+                {
+                    System.out.println("Failed to update customer details.");
+                }
+            }
+
+            case "B" -> {
+                Customer customer = getCurrentCustomer();
+                System.out.println("Customer details:\n" + customer);
+                if (InputHelper.inputYN("Are you sure you want to delete this customer account? (Y/N): "))
+                {
+                    boolean success = access.deleteCustomer(customer);
+                    if (success)
+                    {
+                        System.out.println("Customer account deleted successfully.");
+                        setCurrentCustomer(null);
+                    }
+                    else
+                    {
+                        System.out.println("Customer account deletion failed.");
+                    }
+                }
+            }
+        }
     }
 
     public void retrieveCustomerDetails()

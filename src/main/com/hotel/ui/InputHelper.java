@@ -98,6 +98,29 @@ final class InputHelper {
         }
     }
 
+    public static String inputStringOrNothing(String prompt)
+    {
+        Scanner sc = new Scanner(System.in);
+        String input;
+
+        while (true)
+        {
+            System.out.print(prompt);
+
+            input = sc.nextLine();
+
+            // check that there is no semicolon for sql injection precaution
+            if (input != null && !input.contains(";"))
+            {
+                return input; // Return the valid input
+            }
+            else
+            {
+                System.out.println("Please enter a valid string.");
+            }
+        }
+    }
+
     public static boolean inputYN(String prompt) {
         Scanner sc = new Scanner(System.in);
         String input;

@@ -89,6 +89,29 @@ public class ConciergeAccess
         return customerService.createCustomer(customer);
     }
 
+    public boolean deleteCustomer(Customer customer)
+    {
+        boolean bSuccess = true;
+        for (BookingResult booking : bookingService.getBookingsByCustomerId(customer.getICustomerId()))
+        {
+            bSuccess = bookingService.deleteBooking(booking);
+            if(!bSuccess)
+            {
+                break;
+            }
+        }
+        if(bSuccess)
+        {
+            bSuccess = customerService.deleteCustomer(customer);
+        }
+        return bSuccess;
+    }
+
+    public boolean updateCustomer(Customer customer)
+    {
+        return customerService.updateCustomer(customer);
+    }
+
     public List<BookingResult> getFutureBookingsByCustomerId(int customerId)
     {
         return bookingService.getFutureBookingsByCustomerId(customerId);
