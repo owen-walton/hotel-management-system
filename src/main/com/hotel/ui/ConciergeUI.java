@@ -148,7 +148,8 @@ public class ConciergeUI implements BaseUI
             String input2 = InputHelper.inputLetterMultipleChoice(2, """
                     What would they like to do:
                     A) Retrieve booking details
-                    B) Cancel booking""");
+                    B) Cancel booking
+                    Enter a letter:\s""");
 
             switch (input2)
             {
