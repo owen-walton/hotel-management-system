@@ -268,12 +268,16 @@ public class ConciergeUI implements BaseUI
 
     public void retrieveCustomerDetails()
     {
+        System.out.println("\nRetrieve Customer Details:");
 
-    }
+        if (!findCurrentCustomer())
+        {
+            System.out.println("Customer account could not be found.");
+            return;
+        }
 
-    public void pullCustomerDetailLogs()
-    {
-
+        Customer current = getCurrentCustomer();
+        System.out.println("Customer details:\n" + current);
     }
 
     public boolean findCurrentCustomer()
