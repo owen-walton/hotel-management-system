@@ -60,7 +60,7 @@ public class ConciergeUI implements BaseUI
             input = InputHelper.inputLetterMultipleChoice(5, """
                     What would you like to do?
                     A) Make a booking
-                    B) Cancel/find a booking
+                    B) Cancel/find upcoming booking
                     C) Edit/delete customer details
                     D) Retrieve customer details
                     E) Close program
@@ -141,7 +141,7 @@ public class ConciergeUI implements BaseUI
         List<BookingResult> customerBookings = access.getFutureBookingsByCustomerId(getCurrentCustomer().getICustomerId());
         if(customerBookings.isEmpty())
         {
-            System.out.println("Customer has no bookings to handle.");
+            System.out.println("Customer has no upcoming bookings to handle.");
         }
         else
         {
